@@ -1,4 +1,26 @@
-<h1>Exhibition planner</h1>
+<h1>Exhibition Wishlist</h1>
 
 <h2>Add exhibition</h2>
+
+<form action="/" method="POST">
+    Exhibition
+    <input type="text" name="exhibition_name">
+    Museum
+    <input type="text" name="museum_name">
+    Start date
+    <input type="date" name="start_date">
+    End date
+    <input type="date" name="end_date">
+    <input type="submit" value="Add">
+</form>
+
+    <h2>All Exhibitions:</h2>
+    <ul>
+        {% for exhibition in all_exhibitions %}
+            <li>
+                <strong>{{ exhibition.name }}</strong>, {{ exhibition.museum }},
+                {{ exhibition.start_date.strftime('%d.%m.%Y') }} - {{ exhibition.end_date.strftime('%d.%m.%Y') }}
+            </li>
+        {% endfor %}
+    </ul>
 
