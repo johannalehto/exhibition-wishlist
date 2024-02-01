@@ -1,10 +1,15 @@
 import datetime
 
 from flask import Flask
-from flask import render_template, request
+from flask import redirect, render_template, request
 from pydantic import BaseModel
 
+from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///johannalehto"
+db = SQLAlchemy(app)
+
+
 class ExhibitionEntry(BaseModel):
     name: str
     museum: str
@@ -35,6 +40,9 @@ def index():
             end_date=request.form["end_date"]
         )
         all_exhibitions.append(exhibition_entry)
+
+    result = db.session.execute("SELECT exhibition_name FROM exhibitions")
+    exhibitions = result.fetchall()
     return render_template(
         "index.html",
         all_exhibitions=all_exhibitions
