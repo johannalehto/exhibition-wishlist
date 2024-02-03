@@ -1,0 +1,15 @@
+<h2>Sign up</h2>
+
+<form action="/create_user" method="POST">
+    New username:
+    <input type="text" name="username">
+    New password:
+    <input type="text" name="password_first">
+    Confirm password:
+    <input type="text" name="password_second">
+    First name:
+    <input type="text" name="first_name">
+    <input type="submit" value="Send">
+    <strong>{{response_message if response_message}}</strong>
+
+</form>

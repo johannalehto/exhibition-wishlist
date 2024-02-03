@@ -1,13 +1,57 @@
+from os import getenv
+
 from app import app
 
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request, session
 
-from services import exhibition_service
+from services.exhibition_service import get_exhibitions, create_new_exhibition
+from services.user_service import create_user_session, create_new_user
 
+app.secret_key = getenv("SECRET_KEY")
+
+
+@app.route("/sign_up_page", methods=["GET"])
+def sign_up_page():
+    return render_template("sign_up.html")
+
+@app.route("/create_user", methods=["GET", "POST"])
+def create_user():
+    new_user = create_new_user(
+        username=request.form["username"],
+        password_first=request.form["password_first"],
+        password_second=request.form["password_second"],
+        first_name=request.form["first_name"]
+    )
+    print(f'new user hereee:: {new_user}')
+    if new_user[0]:
+        return render_template("login.html", response_message=new_user[1])
+    else:
+        return render_template("sign_up.html", response_message=new_user[1])
+@app.route("/login_page", methods=["GET"])
+def login_page():
+    return render_template("login.html")
+
+
+@app.route("/login", methods=["POST", "GET"])
+def login():
+    username = request.form["username"]
+    password = request.form["password"]
+
+    user_session = create_user_session(username, password)
+    if user_session[0]:
+        session["username"] = username
+        return redirect("/")
+    return render_template("login.html", response_message=user_session[1])
+
+
+@app.route("/logout")
+def logout():
+    del session["username"]
+    return redirect("/")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    all_exhibitions = exhibition_service.get_exhibitions()
+    all_exhibitions = get_exhibitions()
     return render_template("index.html", all_exhibitions=all_exhibitions)
 
 
@@ -18,7 +62,7 @@ def add_exhibition():
 
 @app.route("/create_exhibition", methods=["POST"])
 def create_exhibition():
-    exhibition_service.create_new_exhibition(
+    create_new_exhibition(
         exhibition_name=request.form["exhibition_name"],
         museum_name=request.form["museum_name"],
         start_date=request.form["start_date"],
@@ -27,6 +71,4 @@ def create_exhibition():
     return redirect("/")
 
 
-@app.route("/exhibitions", methods=["POST"])
-def exhibitions():
-    return render_template("exhibitions.html")
+
