@@ -1,11 +1,10 @@
 from os import getenv
 
-from app import app
-
 from flask import redirect, render_template, request, session
 
-from services.exhibition_service import get_exhibitions, create_new_exhibition
-from services.user_service import create_user_session, create_new_user
+from app import app
+from services.exhibition_service import create_new_exhibition, get_exhibitions
+from services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
 
@@ -14,19 +13,21 @@ app.secret_key = getenv("SECRET_KEY")
 def sign_up_page():
     return render_template("sign_up.html")
 
+
 @app.route("/create_user", methods=["GET", "POST"])
 def create_user():
     new_user = create_new_user(
         username=request.form["username"],
         password_first=request.form["password_first"],
         password_second=request.form["password_second"],
-        first_name=request.form["first_name"]
+        first_name=request.form["first_name"],
     )
-    print(f'new user hereee:: {new_user}')
     if new_user[0]:
         return render_template("login.html", response_message=new_user[1])
     else:
         return render_template("sign_up.html", response_message=new_user[1])
+
+
 @app.route("/login_page", methods=["GET"])
 def login_page():
     return render_template("login.html")
@@ -49,6 +50,7 @@ def logout():
     del session["username"]
     return redirect("/")
 
+
 @app.route("/", methods=["GET", "POST"])
 def index():
     all_exhibitions = get_exhibitions()
@@ -66,9 +68,6 @@ def create_exhibition():
         exhibition_name=request.form["exhibition_name"],
         museum_name=request.form["museum_name"],
         start_date=request.form["start_date"],
-        end_date=request.form["end_date"]
+        end_date=request.form["end_date"],
     )
     return redirect("/")
-
-
-

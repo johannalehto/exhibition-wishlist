@@ -1,5 +1,7 @@
 from sqlalchemy import text
+
 from db import db
+
 
 def handle_museum(museum_name: str) -> int:
     sql = text("SELECT id FROM museums WHERE museum_name = :museum_name")
@@ -17,6 +19,7 @@ def handle_museum(museum_name: str) -> int:
         db.session.commit()
         return new_museum_id[0]
 
+
 def get_exhibitions():
     sql = text(
         """
@@ -28,6 +31,7 @@ def get_exhibitions():
     result = db.session.execute(sql)
     all_exhibitions = result.fetchall()
     return all_exhibitions
+
 
 def create_new_exhibition(
     exhibition_name,
@@ -55,4 +59,3 @@ def create_new_exhibition(
     except Exception as e:
         print("&&&& Error is this:", e)
         print("&&&& new_exhibition values are these:", new_exhibition)
-
