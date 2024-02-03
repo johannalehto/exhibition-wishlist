@@ -22,14 +22,14 @@ The solution would be this web-based app for organizing museum and gallery visit
 
 * **Mark visited:** User can mark if they have already visited the exhibition
 
-### Bonus: 
+### Bonus:
 * **Openings:** an extra section for approaching opening or other events?
 * **Further development:** finding or writing an open API with a list of all the current exhibitions around Helsinki area (eg. [museot.fi](https://museot.fi/nayttelykalenteri/), [myhelsinki.fi](https://www.myhelsinki.fi/fi/search?tags=n%C3%A4yttelyt&category=events)
 
 
 ## Database tables (initial plan)
 
-* **Users:** user information like username, password, name, profile picture 
+* **Users:** user information like username, password, name, profile picture
 * **Exhibitions:** details such as name, location, description, start and end dates, (ending soon -tag?)
 * **Users per exhibitions:** tracking which users plan to attend which exhibitions, or if the users have already visited them (or should those be separate tables)
 * **Reminders:** approaching exhibition end dates
