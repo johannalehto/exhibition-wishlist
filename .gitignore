@@ -2,3 +2,8 @@ __pycache__/
 venv/
 .idea/
 .DS_Store
+.jemma.py
+.env
+.pre-commit-config.yaml
+
+
