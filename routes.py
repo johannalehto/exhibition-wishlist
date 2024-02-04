@@ -56,8 +56,10 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 def index():
     all_exhibitions = get_exhibitions()
-    username = session.get('username')
-    return render_template("index.html", all_exhibitions=all_exhibitions, username=username)
+    username = session.get("username")
+    return render_template(
+        "index.html", all_exhibitions=all_exhibitions, username=username
+    )
 
 
 @app.route("/add_exhibition", methods=["GET"])
