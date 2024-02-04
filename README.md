@@ -8,9 +8,9 @@ _I have a group of friends who try to meet every week to visit interesting museu
 Exhibition Wishlist is a web-based app for organizing museum and gallery visits with friends. It allows users to register, log in, add interesting exhibitions, and track which exhibitions each user is interested in. The app also reminds as exhibition end dates approach, and sorts exhibitions in chronological order based on their end dates.
 
 ## 🚀 Test Deployment
-https://exhibition-wishlist.fly.dev/ [4-2-2024 deployment down]
+https://exhibition-wishlist.fly.dev/
 
-## 🚧 [Changelog](docs/Changelog.md)
+## 🚧 [Changelog ->](docs/Changelog.md)
 
 ## 🔧 Installation for Local testing
 
