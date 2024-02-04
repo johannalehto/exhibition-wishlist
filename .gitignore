@@ -5,3 +5,4 @@ venv/
 .jemma.py
 .env
 .pre-commit-config.yaml
+.dockerignore
