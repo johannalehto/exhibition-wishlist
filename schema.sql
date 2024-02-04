@@ -6,6 +6,11 @@ CREATE TABLE users (
     profile_picture_url TEXT
 );
 
+CREATE TABLE museums (
+    id SERIAL PRIMARY KEY,
+    museum_name TEXT
+);
+
 CREATE TABLE exhibitions (
     id SERIAL PRIMARY KEY,
     exhibition_name TEXT,
@@ -13,11 +18,6 @@ CREATE TABLE exhibitions (
     description TEXT,
     start_date DATE,
     end_date DATE
-);
-
-CREATE TABLE museums (
-    id SERIAL PRIMARY KEY,
-    museum_name TEXT,
 );
 
 CREATE TABLE users_exhibitions (
