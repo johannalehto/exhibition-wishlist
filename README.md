@@ -10,11 +10,11 @@ Exhibition Wishlist is a web-based app for organizing museum and gallery visits 
 ## 🚀 Test Deployment
 https://exhibition-wishlist.fly.dev/ [4-2-2024 deployment down]
 
-## 🚧 [Changelog](docs/Changelog.md) 
+## 🚧 [Changelog](docs/Changelog.md)
 
 ## 🔧 Installation for Local testing
 
-Clone this repository to your computer and navigate to its root folder. 
+Clone this repository to your computer and navigate to its root folder.
 Create an `.env `file in the folder and specify its contents as follows:
 
 ```
