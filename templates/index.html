@@ -1,6 +1,6 @@
 <h1>Exhibition Wishlist</h1>
 {% if username %}
-<p>Logged in as:{{ username }} </p>
+<p>Logged in as: <strong>{{ username }}</strong> </p>
 <form action="/logout" method="GET">
     <button type="submit" class="btn btn-primary">Logout</button>
 </form>
@@ -9,6 +9,7 @@
 <form action="/add_exhibition" method="GET">
     <button type="submit" class="btn btn-primary">Add exhibition</button>
 </form>
+<hr>
 {% else %}
 <form action="/login_page" method="GET">
     <button type="submit" class="btn btn-primary">Login</button>
