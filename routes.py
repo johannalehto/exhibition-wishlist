@@ -35,14 +35,16 @@ def login_page():
 
 @app.route("/login", methods=["POST", "GET"])
 def login():
-    username = request.form["username"]
-    password = request.form["password"]
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
 
-    user_session = create_user_session(username, password)
-    if user_session[0]:
-        session["username"] = username
-        return redirect("/")
-    return render_template("login.html", response_message=user_session[1])
+        user_session = create_user_session(username, password)
+        if user_session[0]:
+            session["username"] = username
+            return redirect("/")
+        return render_template("login.html", response_message=user_session[1])
+    return render_template("login.html", response_message="Please log in.")
 
 
 @app.route("/logout")
@@ -54,7 +56,8 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 def index():
     all_exhibitions = get_exhibitions()
-    return render_template("index.html", all_exhibitions=all_exhibitions)
+    username = session.get('username')
+    return render_template("index.html", all_exhibitions=all_exhibitions, username=username)
 
 
 @app.route("/add_exhibition", methods=["GET"])

@@ -1,8 +1,23 @@
 <h1>Exhibition Wishlist</h1>
-
+{% if username %}
+<p>Logged in as:{{ username }} </p>
+<form action="/logout" method="GET">
+    <button type="submit" class="btn btn-primary">Logout</button>
+</form>
+<hr>
+<h2>Add an exhibition to the list:</h2>
 <form action="/add_exhibition" method="GET">
     <button type="submit" class="btn btn-primary">Add exhibition</button>
 </form>
+{% else %}
+<form action="/login_page" method="GET">
+    <button type="submit" class="btn btn-primary">Login</button>
+</form> or
+<form action="/sign_up_page" method="GET">
+    <button type="submit" class="btn btn-primary">Sign up</button>
+</form>
+
+{% endif %}
     <h2>All Exhibitions:</h2>
     <hr>
         {% for exhibition in all_exhibitions %}
