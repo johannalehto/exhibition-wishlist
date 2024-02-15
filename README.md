@@ -18,6 +18,7 @@ Clone this repository to your computer and navigate to its root folder.
 Create an `.env `file in the folder and specify its contents as follows:
 
 ```
+FLASK_APP=api.app
 DATABASE_URL=<your-local-database-address>
 SECRET_KEY=<generate-some-secret-key>
 ```
@@ -32,9 +33,17 @@ $ pip install -r ./requirements.txt
 You will need to have a local PostgreSQL server installed on your computer.
 You can get it from 🔗 [here](https://www.postgresql.org/) .
 
-Once you have PostgreSQL running, configure the database schema with:
+Once you have PostgreSQL running:
 
-`$ psql < schema.sql`
+Create a new database
+
+```
+$ psql
+user=# CREATE DATABASE <database-name>;`
+```
+then configure the database schema with:
+
+`$ psql -d <database-name> < schema.sql`
 
 And start the application:
 
