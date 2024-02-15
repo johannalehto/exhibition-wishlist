@@ -1,7 +1,7 @@
 from sqlalchemy import text
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from db import db
+from api.db import db
 
 
 def check_existing_username(username):

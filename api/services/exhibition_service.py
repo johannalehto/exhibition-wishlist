@@ -1,6 +1,6 @@
 from sqlalchemy import text
 
-from db import db
+from api.db import db
 
 
 def handle_museum(museum_name: str) -> int:

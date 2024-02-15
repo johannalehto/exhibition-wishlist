@@ -2,9 +2,9 @@ from os import getenv
 
 from flask import redirect, render_template, request, session
 
-from app import app
-from services.exhibition_service import create_new_exhibition, get_exhibitions
-from services.user_service import create_new_user, create_user_session
+from api.app import app
+from api.services.exhibition_service import create_new_exhibition, get_exhibitions
+from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
 
