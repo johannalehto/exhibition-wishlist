@@ -2,14 +2,19 @@
 
 <form action="/create_user" method="POST">
     New username:
-    <input type="text" name="username">
+    <input type="text" name="username" required>
     New password:
-    <input type="password" name="password_first">
+    <input type="password" name="password_first" required>
     Confirm password:
-    <input type="password" name="password_second">
+    <input type="password" name="password_second" required>
     First name:
-    <input type="text" name="first_name">
+    <input type="text" name="first_name" required>
     <input type="submit" value="Send">
-    <strong>{{response_message if response_message}}</strong>
-
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+            <strong>{{message}}</strong>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 </form>
