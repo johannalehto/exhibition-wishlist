@@ -5,7 +5,7 @@ from flask import flash, redirect, render_template, request, session
 from api.app import app
 from api.services.exhibition_service import (check_missing_fields,
                                              create_new_exhibition,
-                                             get_exhibitions, get_museums)
+                                             get_exhibitions, get_museums, get_days_left, add_user_to_exhibition)
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -43,11 +43,14 @@ def login():
 
         user_session = create_user_session(username, password)
         if user_session[0]:
+            session["user_id"] = user_session[1]['id']
             session["username"] = username
+            flash("Login successful")
             return redirect("/")
-        # TODO: use flash instead of response_message
-        return render_template("login.html", response_message=user_session[1])
-    return render_template("login.html", response_message="Please log in.")
+        flash(user_session[1])
+        return render_template("login.html")
+    flash("Please login")
+    return render_template("login.html")
 
 
 @app.route("/logout")
@@ -59,6 +62,7 @@ def logout():
 @app.route("/", methods=["GET", "POST"])
 def index():
     all_exhibitions = get_exhibitions()
+
     username = session.get("username")
     return render_template(
         "index.html", all_exhibitions=all_exhibitions, username=username
@@ -88,3 +92,18 @@ def create_exhibition():
         return redirect("/")
     flash(new_exhibition[1])
     return redirect("/add_exhibition")
+
+@app.route("/join_exhibition", methods=["POST"])
+def join_exhibition():
+    user_id = session.get("user_id")
+    exhibition_id = request.form.get("exhibition_id")
+    print("&&&& user id here::::", user_id)
+    print("&&&& exhibition id here:", exhibition_id)
+    if user_id and exhibition_id:
+        add_user_to_exhibition(user_id, exhibition_id)
+        flash("Joined")
+    else:
+        flash("There was a problem :( ")
+
+    return redirect("/")
+

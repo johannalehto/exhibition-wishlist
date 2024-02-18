@@ -1,6 +1,13 @@
 <h2>Login</h2>
 
-<strong>{{response_message if response_message}}</strong>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+        <strong>{{message}}</strong>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
 <form action="/login" method="POST">
     Username:
     <input type="text" name="username">

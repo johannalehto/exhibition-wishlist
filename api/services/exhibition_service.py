@@ -1,7 +1,28 @@
 from flask import flash, request
 from sqlalchemy import text
+from datetime import datetime
 
 from api.db import db
+
+
+def add_user_to_exhibition(user_id, exhibition_id):
+    new_join = {
+        "user_id": user_id,
+        "exhibition_id": exhibition_id
+    }
+    sql = text(
+        """
+        INSERT INTO users_exhibitions (user_id, exhibition_id)
+        VALUES (:user_id, :exhibition_id)
+        """
+    )
+    db.session.execute(sql, new_join)
+    db.session.commit()
+
+def get_days_left(exhibition_end_date):
+    today = datetime.now().date()
+    delta = exhibition_end_date - today
+    return delta.days
 
 
 def get_museums() -> list:
@@ -10,17 +31,41 @@ def get_museums() -> list:
     museums = result.fetchall()
     return [museum[0] for museum in museums]
 
+def get_attendees(query_exhibition_id) -> list | None:
+    sql = text(
+        """
+        SELECT u.id, u.username, u.first_name, u.profile_picture_url
+        FROM users u
+        JOIN users_exhibitions ue ON u.id = ue.user_id
+        JOIN exhibitions e ON ue.exhibition_id = e.id
+        WHERE e.id = :query_exhibition_id;
+        """
+    )
+
+    result = db.session.execute(sql, {"query_exhibition_id": query_exhibition_id})
+    all_attendees = result.fetchall()
+    return all_attendees
 
 def get_exhibitions():
     sql = text(
         """
-        SELECT e.exhibition_name, e.start_date, e.end_date, m.museum_name
+        SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name
         FROM exhibitions e
         JOIN museums m ON e.museum_id = m.id
     """
     )
     result = db.session.execute(sql)
-    all_exhibitions = result.fetchall()
+    all_exhibitions_from_db = result.fetchall()
+
+    all_exhibitions = []
+    for db_exhibition in all_exhibitions_from_db:
+        exhibition = db_exhibition._asdict()
+
+        exhibition['days_left'] = get_days_left(exhibition['end_date'])
+        exhibition['attendees'] = get_attendees(exhibition['id'])
+
+        all_exhibitions.append(exhibition)
+
     return all_exhibitions
 
 
