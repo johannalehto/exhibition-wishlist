@@ -7,6 +7,14 @@
 
 ✅ **Check required fields** Empty fields not allowed, responses with error messages
 
+✅ **Tracking Attendance:** Users can mark which exhibitions they plan to attend, see others attending, and leave if not interested
+
+✅ **Exhibition closing in N days:** Users can see in how many days exhibition is closing.
+
+
+✅ Exception and error handling for existing features
+
+
 ## 🚀 4-2-2024
 
 ✅ **User registration:** Users can create an account | 🔴 no tests
@@ -20,19 +28,17 @@
 
 ## 🚧 TODO
 
+🔲 Frontend not done at all: CSS styling coming up. 
+
 🔲 Tests for existing features
 
-✅ Exception and error handling for existing features
-
-🔲 Application refactoring before moving on to more features
+🔲 Application refactoring. Currently including stupid hacks, magic numbers in tuples and temporary dictionaries. 
 
 
 
 
 ### Features
 
-
-🔲 **Tracking Attendance:** Users can mark which exhibitions they plan to attend
 
 🔲 **Ending soon -tag:** The application reminds about upcoming exhibitions that are about to end soon (eg within two weeks)
 

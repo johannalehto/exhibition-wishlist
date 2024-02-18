@@ -36,16 +36,15 @@
                     {% endfor %}
                 </h3>
                 {% endif %}
-                    <form action="{{ '/leave_exhibition' if exhibition.is_attending else '/join_exhibition' }}" method="POST">
-                        <input type="hidden" name="exhibition_id" value="{{ exhibition.id }}">
-                        <button class="btn {{ 'btn-dark' if exhibition.is_attending else 'btn-primary' }}">
-                            {% if exhibition.is_attending %}
-                            Not interested
-                            {% else %}
-                            Interested
-                            {% endif %}
-                        </button>
+                {% if exhibition.is_attending %}
+                    <form action="{{ url_for('leave_exhibition', exhibition_id=exhibition.id) }}" method="POST">
+                        <button class="btn btn-dark">Not interested</button>
+                    </form>
+                {% else %}
+                    <form action="{{ url_for('join_exhibition', exhibition_id=exhibition.id) }}" method="POST">
+                        <button class="btn btn-primary">Interested</button>
                     </form>
                 {% endif %}
+            {% endif %}
             <hr>
         {% endfor %}

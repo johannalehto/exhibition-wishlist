@@ -39,11 +39,11 @@ Create a new database
 
 ```
 $ psql
-user=# CREATE DATABASE <database-name>;`
+user=# CREATE DATABASE <your-database-name>;`
 ```
 then configure the database schema with:
 
-`$ psql -d <database-name> < schema.sql`
+`$ psql -d <your-database-name> -f < api/database/schema.sql`
 
 And start the application:
 
