@@ -19,6 +19,16 @@ def add_user_to_exhibition(user_id, exhibition_id):
     db.session.execute(sql, new_join)
     db.session.commit()
 
+def remove_user_from_exhibition(user_id, exhibition_id):
+    sql = text(
+        """
+        DELETE FROM users_exhibitions
+        WHERE user_id = :user_id AND exhibition_id = :exhibition_id
+        """
+    )
+    db.session.execute(sql, {"user_id": user_id, "exhibition_id": exhibition_id})
+    db.session.commit()
+
 def get_days_left(exhibition_end_date):
     today = datetime.now().date()
     delta = exhibition_end_date - today

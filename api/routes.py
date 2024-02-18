@@ -5,7 +5,8 @@ from flask import flash, redirect, render_template, request, session
 from api.app import app
 from api.services.exhibition_service import (check_missing_fields,
                                              create_new_exhibition,
-                                             get_exhibitions, get_museums, get_days_left, add_user_to_exhibition)
+                                             get_exhibitions, get_museums, get_days_left, add_user_to_exhibition,
+                                             remove_user_from_exhibition)
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -106,6 +107,19 @@ def join_exhibition():
         flash("Joined")
     else:
         flash("There was a problem :( ")
+
+    return redirect("/")
+
+
+@app.route("/leave_exhibition", methods=["POST"])
+def leave_exhibition():
+    user_id = session.get("user_id")
+    exhibition_id = request.form.get("exhibition_id")
+    if user_id and exhibition_id:
+        remove_user_from_exhibition(user_id, exhibition_id)
+        flash("Not going")
+    else:
+        flash("There was a problem :(")
 
     return redirect("/")
 

@@ -30,19 +30,19 @@
             <h6>closing in {{ exhibition.days_left }} days</h6>
             {% if username %}
                 {% if exhibition.attendees %}
-                <h3>Going:
+                <h3>Interested:
                     {% for attendee in exhibition.attendees %}
                         {{attendee['first_name']}}
                     {% endfor %}
                 </h3>
                 {% endif %}
-                    <form action="/join_exhibition" method="POST">
+                    <form action="{{ '/leave_exhibition' if exhibition.is_attending else '/join_exhibition' }}" method="POST">
                         <input type="hidden" name="exhibition_id" value="{{ exhibition.id }}">
                         <button class="btn {{ 'btn-dark' if exhibition.is_attending else 'btn-primary' }}">
                             {% if exhibition.is_attending %}
-                            Going
+                            Not interested
                             {% else %}
-                            Join
+                            Interested
                             {% endif %}
                         </button>
                     </form>
