@@ -1,13 +1,18 @@
 <h2>Add exhibition</h2>
 
 <form action="/create_exhibition" method="POST">
-    Exhibition
+    Exhibition:
     <input type="text" name="exhibition_name">
-    Museum
-    <input type="text" name="museum_name">
-    Start date
+    Museum:
+    <input type="text" id="museum_name" name="museum_name" list="museum_list">
+        <datalist id="museum_list">
+            {% for name in museum_names %}
+            <option value="{{ name }}">
+            {% endfor %}
+        </datalist>
+    Start date:
     <input type="date" name="start_date">
-    End date
+    End date:
     <input type="date" name="end_date">
     <input type="submit" value="Add">
 </form>

@@ -3,6 +3,13 @@ from sqlalchemy import text
 from api.db import db
 
 
+def get_museums() -> list:
+    sql = text("SELECT museum_name FROM museums ORDER BY museum_name")
+    result = db.session.execute(sql)
+    museums = result.fetchall()
+    return [museum[0] for museum in museums]
+
+
 def handle_museum(museum_name: str) -> int:
     sql = text("SELECT id FROM museums WHERE museum_name = :museum_name")
     result = db.session.execute(sql, {"museum_name": museum_name})

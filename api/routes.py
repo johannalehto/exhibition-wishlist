@@ -3,7 +3,7 @@ from os import getenv
 from flask import redirect, render_template, request, session
 
 from api.app import app
-from api.services.exhibition_service import create_new_exhibition, get_exhibitions
+from api.services.exhibition_service import create_new_exhibition, get_exhibitions, get_museums
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -64,7 +64,8 @@ def index():
 
 @app.route("/add_exhibition", methods=["GET"])
 def add_exhibition():
-    return render_template("add_exhibition.html")
+    museum_names = get_museums()
+    return render_template("add_exhibition.html", museum_names=museum_names)
 
 
 @app.route("/create_exhibition", methods=["POST"])
