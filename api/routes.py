@@ -1,6 +1,6 @@
 from os import getenv
 
-from flask import flash, redirect, render_template, request, session
+from flask import flash, redirect, render_template, request, session, url_for
 
 from api.app import app
 from api.services.exhibition_service import (check_missing_fields,
@@ -82,10 +82,8 @@ def add_exhibition():
 
 @app.route("/create_exhibition", methods=["POST"])
 def create_exhibition():
-
     if check_missing_fields():
         return redirect("/add_exhibition")
-
     new_exhibition = create_new_exhibition(
         exhibition_name=request.form["exhibition_name"],
         museum_name=request.form["museum_name"],
@@ -98,28 +96,24 @@ def create_exhibition():
     flash(new_exhibition[1])
     return redirect("/add_exhibition")
 
-@app.route("/join_exhibition", methods=["POST"])
-def join_exhibition():
+@app.route("/join_exhibition/<int:exhibition_id>", methods=["POST"])
+def join_exhibition(exhibition_id):
     user_id = session.get("user_id")
-    exhibition_id = request.form.get("exhibition_id")
     if user_id and exhibition_id:
         add_user_to_exhibition(user_id, exhibition_id)
         flash("Joined")
     else:
         flash("There was a problem :( ")
-
     return redirect("/")
 
 
-@app.route("/leave_exhibition", methods=["POST"])
-def leave_exhibition():
+@app.route("/leave_exhibition/<int:exhibition_id>", methods=["POST"])
+def leave_exhibition(exhibition_id):
     user_id = session.get("user_id")
-    exhibition_id = request.form.get("exhibition_id")
     if user_id and exhibition_id:
         remove_user_from_exhibition(user_id, exhibition_id)
         flash("Not going")
     else:
         flash("There was a problem :(")
-
     return redirect("/")
 
