@@ -9,7 +9,14 @@
 <form action="/add_exhibition" method="GET">
     <button type="submit" class="btn btn-primary">Add exhibition</button>
 </form>
-<strong>{{response_message if response_message}}</strong>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+        <strong>{{message}}</strong>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
 
 <hr>
 {% else %}
@@ -21,9 +28,9 @@
 </form>
 
 {% endif %}
-    <h2>All Exhibitions:</h2>
+    <h2>Currently open Exhibitions:</h2>
     <hr>
-        {% for exhibition in all_exhibitions %}
+        {% for exhibition in current_exhibitions %}
             <p>{{ exhibition.start_date.strftime('%d.%m.%Y') }} - {{ exhibition.end_date.strftime('%d.%m.%Y') }}</p>
             <h3>{{ exhibition.exhibition_name }}</h3>
             <h5>{{ exhibition.museum_name }}</h5>
@@ -48,3 +55,20 @@
             {% endif %}
             <hr>
         {% endfor %}
+    <hr>
+    <h2>Past exhibitions:</h2>
+    <hr>
+        {% for exhibition in past_exhibitions %}
+            <p>{{ exhibition.start_date.strftime('%d.%m.%Y') }} - {{ exhibition.end_date.strftime('%d.%m.%Y') }}</p>
+            <h3>{{ exhibition.exhibition_name }}</h3>
+            <h5>{{ exhibition.museum_name }}</h5>
+            {% if exhibition.attendees %}
+            <h3>Interested:
+                {% for attendee in exhibition.attendees %}
+                    {{attendee['first_name']}}
+                {% endfor %}
+            </h3>
+            {% endif %}
+        <hr>
+        {% endfor %}
+

@@ -58,27 +58,56 @@ def get_attendees(query_exhibition_id) -> list | None:
     return all_attendees
 
 
-def get_exhibitions():
+def get_current_exhibitions():
+    now = datetime.utcnow().date().isoformat()
+
     sql = text(
         """
         SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name
         FROM exhibitions e
         JOIN museums m ON e.museum_id = m.id
+        WHERE e.end_date >= :now
+        ORDER BY e.end_date ASC
     """
     )
-    result = db.session.execute(sql)
-    all_exhibitions_from_db = result.fetchall()
+    result = db.session.execute(sql, {'now': now})
+    current_exhibitions_from_db = result.fetchall()
 
-    all_exhibitions = []
-    for db_exhibition in all_exhibitions_from_db:
+    current_exhibitions = []
+    for db_exhibition in current_exhibitions_from_db:
         exhibition = db_exhibition._asdict()
 
         exhibition["days_left"] = get_days_left(exhibition["end_date"])
         exhibition["attendees"] = get_attendees(exhibition["id"])
 
-        all_exhibitions.append(exhibition)
+        current_exhibitions.append(exhibition)
 
-    return all_exhibitions
+    return current_exhibitions
+
+def get_past_exhibitions():
+    now = datetime.utcnow().date().isoformat()
+
+    sql = text(
+        """
+        SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name 
+        FROM exhibitions e
+        JOIN museums m ON e.museum_id = m.id
+        WHERE e.end_date < :now
+        ORDER BY e.end_date DESC
+    """
+    )
+    result = db.session.execute(sql, {'now': now})
+    past_exhibitions_from_db = result.fetchall()
+
+    past_exhibitions = []
+    for db_exhibition in past_exhibitions_from_db:
+        exhibition = db_exhibition._asdict()
+        exhibition["attendees"] = get_attendees(exhibition["id"])
+
+        past_exhibitions.append(exhibition)
+
+    return past_exhibitions
+
 
 
 def handle_museum(museum_name: str) -> int:

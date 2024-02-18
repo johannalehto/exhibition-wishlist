@@ -1,4 +1,5 @@
-from os import getenv
+import secrets
+from os import getenv, abort
 
 from flask import flash, redirect, render_template, request, session, url_for
 
@@ -6,9 +7,8 @@ from api.app import app
 from api.services.exhibition_service import (add_user_to_exhibition,
                                              check_missing_fields,
                                              create_new_exhibition,
-                                             get_days_left, get_exhibitions,
                                              get_museums,
-                                             remove_user_from_exhibition)
+                                             remove_user_from_exhibition, get_current_exhibitions, get_past_exhibitions)
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -50,6 +50,7 @@ def login():
         if user_session[0]:
             session["user_id"] = user_session[1]["id"]
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect(url_for("index"))
         flash(user_session[1])
         return redirect(url_for("login_page"))
@@ -65,17 +66,21 @@ def logout():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    all_exhibitions = get_exhibitions()
+    current_exhibitions = get_current_exhibitions()
+    past_exhibitions = get_past_exhibitions()
 
     username = session.get("username")
     user_id = session.get("user_id")
 
-    for exhibition in all_exhibitions:
-        exhibition["is_attending"] = any(
+    for exhibition in current_exhibitions:
+        exhibition["is_attending"] = any( # TODO fix this hack
             user_id == attendee[0] for attendee in exhibition["attendees"]
         )
     return render_template(
-        "index.html", all_exhibitions=all_exhibitions, username=username
+        "index.html",
+        current_exhibitions=current_exhibitions,
+        past_exhibitions=past_exhibitions,
+        username=username
     )
 
 
@@ -87,6 +92,11 @@ def add_exhibition():
 
 @app.route("/create_exhibition", methods=["POST"])
 def create_exhibition():
+    # TODO: create a separate method for csrf
+    if session["csrf_token"] != request.form["csrf_token"]:
+        flash("Something went wrong, please try again.")
+        return redirect(url_for("index"))
+
     if check_missing_fields():
         return redirect("/add_exhibition")
     new_exhibition = create_new_exhibition(

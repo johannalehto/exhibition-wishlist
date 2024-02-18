@@ -14,6 +14,7 @@
     <input type="date" name="start_date" required>
     End date:
     <input type="date" name="end_date" required>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Add">
 </form>
 
