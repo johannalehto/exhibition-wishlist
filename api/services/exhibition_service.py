@@ -1,5 +1,5 @@
+from flask import flash, request
 from sqlalchemy import text
-from flask import flash
 
 from api.db import db
 
@@ -23,6 +23,7 @@ def get_exhibitions():
     all_exhibitions = result.fetchall()
     return all_exhibitions
 
+
 def handle_museum(museum_name: str) -> int:
     sql = text("SELECT id FROM museums WHERE museum_name = :museum_name")
     result = db.session.execute(sql, {"museum_name": museum_name})
@@ -40,14 +41,18 @@ def handle_museum(museum_name: str) -> int:
         return new_museum_id[0]
 
 
-# def check_exhibition_fields():
-#     required_fields = ['exhibition_name', 'museum_name', 'start_date', 'end_date']
-#
-#     missing_fields = [field.replace("_", " ").capitalize() for field in required_fields if not request.form.get(field, '').strip()]
-#     if missing_fields:
-#         flash(f'Please fill in: {", ".join(missing_fields)}')
-#         return True
-#     return False
+def check_missing_fields():
+    required_fields = ["exhibition_name", "museum_name", "start_date", "end_date"]
+
+    missing_fields = [
+        field.replace("_", " ").capitalize()
+        for field in required_fields
+        if not request.form.get(field, "").strip()
+    ]
+    if missing_fields:
+        flash(f'Please fill in: {", ".join(missing_fields)}')
+        return True
+    return False
 
 
 def create_new_exhibition(

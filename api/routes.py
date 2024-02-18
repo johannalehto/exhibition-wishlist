@@ -1,9 +1,11 @@
 from os import getenv
 
-from flask import redirect, render_template, request, session, flash
+from flask import flash, redirect, render_template, request, session
 
 from api.app import app
-from api.services.exhibition_service import create_new_exhibition, get_exhibitions, get_museums
+from api.services.exhibition_service import (check_missing_fields,
+                                             create_new_exhibition,
+                                             get_exhibitions, get_museums)
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -64,20 +66,13 @@ def index():
 @app.route("/add_exhibition", methods=["GET"])
 def add_exhibition():
     museum_names = get_museums()
-    return render_template(
-    "add_exhibition.html",museum_names=museum_names)
+    return render_template("add_exhibition.html", museum_names=museum_names)
 
 
 @app.route("/create_exhibition", methods=["POST"])
 def create_exhibition():
-    required_fields = ['exhibition_name', 'museum_name', 'start_date', 'end_date']
-    missing_fields = []
 
-    for field in required_fields:
-        if not request.form.get(field, '').strip():
-            missing_fields.append(field.replace("_", " ").capitalize())
-    if missing_fields:
-        flash(f'Please fill in: {", ".join(missing_fields)}')
+    if check_missing_fields():
         return redirect("/add_exhibition")
 
     new_exhibition = create_new_exhibition(
@@ -91,5 +86,3 @@ def create_exhibition():
         return redirect("/")
     flash(new_exhibition[1])
     return redirect("/add_exhibition")
-
-
