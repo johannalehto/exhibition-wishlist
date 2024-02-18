@@ -9,6 +9,8 @@
 <form action="/add_exhibition" method="GET">
     <button type="submit" class="btn btn-primary">Add exhibition</button>
 </form>
+<strong>{{response_message if response_message}}</strong>
+
 <hr>
 {% else %}
 <form action="/login_page" method="GET">
@@ -25,6 +27,25 @@
             <p>{{ exhibition.start_date.strftime('%d.%m.%Y') }} - {{ exhibition.end_date.strftime('%d.%m.%Y') }}</p>
             <h3>{{ exhibition.exhibition_name }}</h3>
             <h5>{{ exhibition.museum_name }}</h5>
-
+            <h6>closing in {{ exhibition.days_left }} days</h6>
+            {% if username %}
+                {% if exhibition.attendees %}
+                <h3>Interested:
+                    {% for attendee in exhibition.attendees %}
+                        {{attendee['first_name']}}
+                    {% endfor %}
+                </h3>
+                {% endif %}
+                    <form action="{{ '/leave_exhibition' if exhibition.is_attending else '/join_exhibition' }}" method="POST">
+                        <input type="hidden" name="exhibition_id" value="{{ exhibition.id }}">
+                        <button class="btn {{ 'btn-dark' if exhibition.is_attending else 'btn-primary' }}">
+                            {% if exhibition.is_attending %}
+                            Not interested
+                            {% else %}
+                            Interested
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
             <hr>
         {% endfor %}

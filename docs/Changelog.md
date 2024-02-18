@@ -1,6 +1,12 @@
 # Changelog
 
 
+## 🚀 18-2-2024
+
+✅ **Museum suggestions:** User can choose a museum from a list of existing museums when adding a new exhibition
+
+✅ **Check required fields** Empty fields not allowed, responses with error messages
+
 ## 🚀 4-2-2024
 
 ✅ **User registration:** Users can create an account | 🔴 no tests
@@ -16,7 +22,7 @@
 
 🔲 Tests for existing features
 
-🔲 Exception and error handling for existing features
+✅ Exception and error handling for existing features
 
 🔲 Application refactoring before moving on to more features
 
@@ -25,7 +31,6 @@
 
 ### Features
 
-🔲 **Search for museums:** User can choose a museum from a list of existing museums
 
 🔲 **Tracking Attendance:** Users can mark which exhibitions they plan to attend
 
@@ -58,10 +63,12 @@
 
 ✅ **Exhibitions:** details such as name, location, description, start and end dates, (ending soon -tag?)
 
-✅ **Users per exhibitions:** tracking which users plan to attend which exhibitions, or if the users have already visited them (or should those be separate tables)
+✅ **Users per exhibitions:** tracking which users plan to attend which exhibitions
 
-🔲 **Groups:** User can create new group which can start their own wishlist
+✅ **Groups:** User can create new group which can start their own wishlist
 
-🔲 **Reminders:** approaching exhibition end dates
+✅ **Users per groups:** which users belong to a group
+
+✅ **Exhibitions per group:** which exhibitions belongs to a group
 
 🔲 **Events:** a separate table for openings and other events

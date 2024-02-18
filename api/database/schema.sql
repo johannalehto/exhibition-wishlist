@@ -1,4 +1,4 @@
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE,
     password TEXT,
@@ -6,12 +6,12 @@ CREATE TABLE users (
     profile_picture_url TEXT
 );
 
-CREATE TABLE museums (
+CREATE TABLE IF NOT EXISTS museums (
     id SERIAL PRIMARY KEY,
     museum_name TEXT
 );
 
-CREATE TABLE exhibitions (
+CREATE TABLE IF NOT EXISTS exhibitions (
     id SERIAL PRIMARY KEY,
     exhibition_name TEXT,
     museum_id INT REFERENCES museums(id),
@@ -20,22 +20,22 @@ CREATE TABLE exhibitions (
     end_date DATE
 );
 
-CREATE TABLE users_exhibitions (
+CREATE TABLE IF NOT EXISTS users_exhibitions (
     user_id INT REFERENCES users(id),
-    exhibition_id INT REFERENCES exhibitions(id),
-)
+    exhibition_id INT REFERENCES exhibitions(id)
+);
 
-CREATE TABLE groups (
+CREATE TABLE IF NOT EXISTS groups (
     id SERIAL PRIMARY KEY,
     group_name TEXT
-)
+);
 
-CREATE TABLE groups_users (
+CREATE TABLE IF NOT EXISTS groups_users (
     group_id INT REFERENCES groups(id),
     user_id INT REFERENCES users(id)
-)
+);
 
-CREATE TABLE groups_exhibitions (
+CREATE TABLE IF NOT EXISTS groups_exhibitions (
     group_id INT REFERENCES groups(id),
     exhibitions_id INT REFERENCES exhibitions(id)
-)
+);
