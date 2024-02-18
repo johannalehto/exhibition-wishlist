@@ -1,9 +1,11 @@
 from os import getenv
 
-from flask import redirect, render_template, request, session
+from flask import flash, redirect, render_template, request, session
 
 from api.app import app
-from api.services.exhibition_service import create_new_exhibition, get_exhibitions
+from api.services.exhibition_service import (check_missing_fields,
+                                             create_new_exhibition,
+                                             get_exhibitions, get_museums)
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -22,10 +24,10 @@ def create_user():
         password_second=request.form["password_second"],
         first_name=request.form["first_name"],
     )
-    if new_user[0]:
+
+    if new_user[0]: # TODO: use flash instead of response_message
         return render_template("login.html", response_message=new_user[1])
-    else:
-        return render_template("sign_up.html", response_message=new_user[1])
+    return render_template("sign_up.html", response_message=new_user[1])
 
 
 @app.route("/login_page", methods=["GET"])
@@ -43,6 +45,7 @@ def login():
         if user_session[0]:
             session["username"] = username
             return redirect("/")
+        # TODO: use flash instead of response_message
         return render_template("login.html", response_message=user_session[1])
     return render_template("login.html", response_message="Please log in.")
 
@@ -64,15 +67,24 @@ def index():
 
 @app.route("/add_exhibition", methods=["GET"])
 def add_exhibition():
-    return render_template("add_exhibition.html")
+    museum_names = get_museums()
+    return render_template("add_exhibition.html", museum_names=museum_names)
 
 
 @app.route("/create_exhibition", methods=["POST"])
 def create_exhibition():
-    create_new_exhibition(
+
+    if check_missing_fields():
+        return redirect("/add_exhibition")
+
+    new_exhibition = create_new_exhibition(
         exhibition_name=request.form["exhibition_name"],
         museum_name=request.form["museum_name"],
         start_date=request.form["start_date"],
         end_date=request.form["end_date"],
     )
-    return redirect("/")
+    if new_exhibition[0]:
+        flash(new_exhibition[1])
+        return redirect("/")
+    flash(new_exhibition[1])
+    return redirect("/add_exhibition")

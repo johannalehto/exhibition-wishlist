@@ -1,6 +1,27 @@
+from flask import flash, request
 from sqlalchemy import text
 
 from api.db import db
+
+
+def get_museums() -> list:
+    sql = text("SELECT museum_name FROM museums ORDER BY museum_name")
+    result = db.session.execute(sql)
+    museums = result.fetchall()
+    return [museum[0] for museum in museums]
+
+
+def get_exhibitions():
+    sql = text(
+        """
+        SELECT e.exhibition_name, e.start_date, e.end_date, m.museum_name
+        FROM exhibitions e
+        JOIN museums m ON e.museum_id = m.id
+    """
+    )
+    result = db.session.execute(sql)
+    all_exhibitions = result.fetchall()
+    return all_exhibitions
 
 
 def handle_museum(museum_name: str) -> int:
@@ -20,17 +41,18 @@ def handle_museum(museum_name: str) -> int:
         return new_museum_id[0]
 
 
-def get_exhibitions():
-    sql = text(
-        """
-        SELECT e.exhibition_name, e.start_date, e.end_date, m.museum_name
-        FROM exhibitions e
-        JOIN museums m ON e.museum_id = m.id
-    """
-    )
-    result = db.session.execute(sql)
-    all_exhibitions = result.fetchall()
-    return all_exhibitions
+def check_missing_fields():
+    required_fields = ["exhibition_name", "museum_name", "start_date", "end_date"]
+
+    missing_fields = [
+        field.replace("_", " ").capitalize()
+        for field in required_fields
+        if not request.form.get(field, "").strip()
+    ]
+    if missing_fields:
+        flash(f'Please fill in: {", ".join(missing_fields)}')
+        return True
+    return False
 
 
 def create_new_exhibition(
@@ -39,6 +61,7 @@ def create_new_exhibition(
     start_date,
     end_date,
 ):
+
     museum_id = handle_museum(museum_name)
 
     new_exhibition = {
@@ -51,11 +74,10 @@ def create_new_exhibition(
         """
         INSERT INTO exhibitions (exhibition_name, museum_id, start_date, end_date)
         VALUES (:exhibition_name, :museum_id, :start_date, :end_date)
-    """
+        """
     )
-    try:
-        db.session.execute(sql, new_exhibition)
-        db.session.commit()
-    except Exception as e:
-        print("&&&& Error is this:", e)
-        print("&&&& new_exhibition values are these:", new_exhibition)
+
+    db.session.execute(sql, new_exhibition)
+    db.session.commit()
+
+    return True, "Added exhibition succesfully"
