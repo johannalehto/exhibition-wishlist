@@ -1,6 +1,6 @@
 from os import getenv
 
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, flash
 
 from api.app import app
 from api.services.exhibition_service import create_new_exhibition, get_exhibitions, get_museums
@@ -24,8 +24,7 @@ def create_user():
     )
     if new_user[0]:
         return render_template("login.html", response_message=new_user[1])
-    else:
-        return render_template("sign_up.html", response_message=new_user[1])
+    return render_template("sign_up.html", response_message=new_user[1])
 
 
 @app.route("/login_page", methods=["GET"])
@@ -65,15 +64,32 @@ def index():
 @app.route("/add_exhibition", methods=["GET"])
 def add_exhibition():
     museum_names = get_museums()
-    return render_template("add_exhibition.html", museum_names=museum_names)
+    return render_template(
+    "add_exhibition.html",museum_names=museum_names)
 
 
 @app.route("/create_exhibition", methods=["POST"])
 def create_exhibition():
-    create_new_exhibition(
+    required_fields = ['exhibition_name', 'museum_name', 'start_date', 'end_date']
+    missing_fields = []
+
+    for field in required_fields:
+        if not request.form.get(field, '').strip():
+            missing_fields.append(field.replace("_", " ").capitalize())
+    if missing_fields:
+        flash(f'Please fill in: {", ".join(missing_fields)}')
+        return redirect("/add_exhibition")
+
+    new_exhibition = create_new_exhibition(
         exhibition_name=request.form["exhibition_name"],
         museum_name=request.form["museum_name"],
         start_date=request.form["start_date"],
         end_date=request.form["end_date"],
     )
-    return redirect("/")
+    if new_exhibition[0]:
+        flash(new_exhibition[1])
+        return redirect("/")
+    flash(new_exhibition[1])
+    return redirect("/add_exhibition")
+
+

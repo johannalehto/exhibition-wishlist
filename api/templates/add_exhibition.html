@@ -2,17 +2,26 @@
 
 <form action="/create_exhibition" method="POST">
     Exhibition:
-    <input type="text" name="exhibition_name">
+    <input type="text" name="exhibition_name" required>
     Museum:
-    <input type="text" id="museum_name" name="museum_name" list="museum_list">
+    <input type="text" id="museum_name" name="museum_name" list="museum_list" required>
         <datalist id="museum_list">
             {% for name in museum_names %}
             <option value="{{ name }}">
             {% endfor %}
         </datalist>
     Start date:
-    <input type="date" name="start_date">
+    <input type="date" name="start_date" required>
     End date:
-    <input type="date" name="end_date">
+    <input type="date" name="end_date" required>
     <input type="submit" value="Add">
 </form>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+        <strong>{{message}}</strong>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
