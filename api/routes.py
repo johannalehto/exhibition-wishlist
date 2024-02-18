@@ -24,7 +24,8 @@ def create_user():
         password_second=request.form["password_second"],
         first_name=request.form["first_name"],
     )
-    if new_user[0]:
+
+    if new_user[0]: # TODO: use flash instead of response_message
         return render_template("login.html", response_message=new_user[1])
     return render_template("sign_up.html", response_message=new_user[1])
 
@@ -44,6 +45,7 @@ def login():
         if user_session[0]:
             session["username"] = username
             return redirect("/")
+        # TODO: use flash instead of response_message
         return render_template("login.html", response_message=user_session[1])
     return render_template("login.html", response_message="Please log in.")
 
