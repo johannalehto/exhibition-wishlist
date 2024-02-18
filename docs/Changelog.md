@@ -28,11 +28,11 @@
 
 ## 🚧 TODO
 
-🔲 Frontend not done at all: CSS styling coming up. 
+🔲 Frontend not done at all: CSS styling coming up.
 
 🔲 Tests for existing features
 
-🔲 Application refactoring. Currently including stupid hacks, magic numbers in tuples and temporary dictionaries. 
+🔲 Application refactoring. Currently including stupid hacks, magic numbers in tuples and temporary dictionaries.
 
 
 

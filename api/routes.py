@@ -3,9 +3,11 @@ from os import getenv
 from flask import flash, redirect, render_template, request, session, url_for
 
 from api.app import app
-from api.services.exhibition_service import (check_missing_fields,
+from api.services.exhibition_service import (add_user_to_exhibition,
+                                             check_missing_fields,
                                              create_new_exhibition,
-                                             get_exhibitions, get_museums, get_days_left, add_user_to_exhibition,
+                                             get_days_left, get_exhibitions,
+                                             get_museums,
                                              remove_user_from_exhibition)
 from api.services.user_service import create_new_user, create_user_session
 
@@ -25,10 +27,12 @@ def create_user():
         password_second=request.form["password_second"],
         first_name=request.form["first_name"],
     )
-
-    if new_user[0]: # TODO: use flash instead of response_message
-        return render_template("login.html", response_message=new_user[1])
-    return render_template("sign_up.html", response_message=new_user[1])
+    if new_user[0]:
+        flash("User created successfully")
+        return redirect(url_for("login_page"))
+    else:
+        flash(new_user[1])
+        return redirect(url_for("sign_up_page"))
 
 
 @app.route("/login_page", methods=["GET"])
@@ -44,20 +48,19 @@ def login():
 
         user_session = create_user_session(username, password)
         if user_session[0]:
-            session["user_id"] = user_session[1]['id']
+            session["user_id"] = user_session[1]["id"]
             session["username"] = username
-            flash("Login successful")
-            return redirect("/")
+            return redirect(url_for("index"))
         flash(user_session[1])
-        return render_template("login.html")
-    flash("Please login")
-    return render_template("login.html")
+        return redirect(url_for("login_page"))
+    return redirect(url_for("login_page"))
 
 
 @app.route("/logout")
 def logout():
     del session["username"]
-    return redirect("/")
+    flash("You have been logged out")
+    return redirect(url_for("login_page"))
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -68,7 +71,9 @@ def index():
     user_id = session.get("user_id")
 
     for exhibition in all_exhibitions:
-        exhibition['is_attending'] = any(user_id == attendee[0] for attendee in exhibition['attendees'])
+        exhibition["is_attending"] = any(
+            user_id == attendee[0] for attendee in exhibition["attendees"]
+        )
     return render_template(
         "index.html", all_exhibitions=all_exhibitions, username=username
     )
@@ -92,19 +97,17 @@ def create_exhibition():
     )
     if new_exhibition[0]:
         flash(new_exhibition[1])
-        return redirect("/")
+        return redirect(url_for("index"))
     flash(new_exhibition[1])
-    return redirect("/add_exhibition")
+    return redirect(url_for("add_exhibition"))
+
 
 @app.route("/join_exhibition/<int:exhibition_id>", methods=["POST"])
 def join_exhibition(exhibition_id):
     user_id = session.get("user_id")
     if user_id and exhibition_id:
         add_user_to_exhibition(user_id, exhibition_id)
-        flash("Joined")
-    else:
-        flash("There was a problem :( ")
-    return redirect("/")
+    return redirect(url_for("index"))
 
 
 @app.route("/leave_exhibition/<int:exhibition_id>", methods=["POST"])
@@ -112,8 +115,4 @@ def leave_exhibition(exhibition_id):
     user_id = session.get("user_id")
     if user_id and exhibition_id:
         remove_user_from_exhibition(user_id, exhibition_id)
-        flash("Not going")
-    else:
-        flash("There was a problem :(")
-    return redirect("/")
-
+    return redirect(url_for("index"))

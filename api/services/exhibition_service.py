@@ -1,15 +1,13 @@
+from datetime import datetime
+
 from flask import flash, request
 from sqlalchemy import text
-from datetime import datetime
 
 from api.db import db
 
 
 def add_user_to_exhibition(user_id, exhibition_id):
-    new_join = {
-        "user_id": user_id,
-        "exhibition_id": exhibition_id
-    }
+    new_join = {"user_id": user_id, "exhibition_id": exhibition_id}
     sql = text(
         """
         INSERT INTO users_exhibitions (user_id, exhibition_id)
@@ -18,6 +16,7 @@ def add_user_to_exhibition(user_id, exhibition_id):
     )
     db.session.execute(sql, new_join)
     db.session.commit()
+
 
 def remove_user_from_exhibition(user_id, exhibition_id):
     sql = text(
@@ -28,6 +27,7 @@ def remove_user_from_exhibition(user_id, exhibition_id):
     )
     db.session.execute(sql, {"user_id": user_id, "exhibition_id": exhibition_id})
     db.session.commit()
+
 
 def get_days_left(exhibition_end_date):
     today = datetime.now().date()
@@ -40,6 +40,7 @@ def get_museums() -> list:
     result = db.session.execute(sql)
     museums = result.fetchall()
     return [museum[0] for museum in museums]
+
 
 def get_attendees(query_exhibition_id) -> list | None:
     sql = text(
@@ -56,6 +57,7 @@ def get_attendees(query_exhibition_id) -> list | None:
     all_attendees = result.fetchall()
     return all_attendees
 
+
 def get_exhibitions():
     sql = text(
         """
@@ -71,9 +73,8 @@ def get_exhibitions():
     for db_exhibition in all_exhibitions_from_db:
         exhibition = db_exhibition._asdict()
 
-        exhibition['days_left'] = get_days_left(exhibition['end_date'])
-        exhibition['attendees'] = get_attendees(exhibition['id'])
-
+        exhibition["days_left"] = get_days_left(exhibition["end_date"])
+        exhibition["attendees"] = get_attendees(exhibition["id"])
 
         all_exhibitions.append(exhibition)
 

@@ -46,8 +46,8 @@ def create_user_session(username, password):
         return False, "Invalid username"
     else:
         user_from_db = user._asdict()
-        user_id, hash_value = user_from_db['id'], user_from_db['password']
+        user_id, hash_value = user_from_db["id"], user_from_db["password"]
         if check_password_hash(hash_value, password):
-            return True, {'id': user_id}
+            return True, {"id": user_id}
         else:
             return False, "Invalid password"
