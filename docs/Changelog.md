@@ -3,16 +3,19 @@
 
 ## 🚀 18-2-2024
 
-✅ **Museum suggestions:** User can choose a museum from a list of existing museums when adding a new exhibition
+✅ **Museum suggestions:** User can choose a museum from a list of existing museums when adding a new exhibition | 🔴 no tests
 
-✅ **Check required fields** Empty fields not allowed, responses with error messages
+✅ **Check required fields** Empty fields not allowed, responses with error messages | 🔴 no tests
 
-✅ **Tracking Attendance:** Users can mark which exhibitions they plan to attend, see others attending, and leave if not interested
+✅ **Tracking Attendance:** Users can mark which exhibitions they plan to attend, see others attending, and leave if not interested | 🔴 no tests
 
-✅ **Exhibition closing in N days:** Users can see in how many days exhibition is closing.
-
+✅ **Exhibition closing in N days:** Users can see in how many days exhibition is closing. | 🔴 no tests
 
 ✅ Exception and error handling for existing features
+
+✅ **Exhibitions sorted:** Exhibitions listed according to ones ending soonest
+
+✅ **Past exhibitions:** User can see exhibitions that already ended | 🔴 no tests
 
 
 ## 🚀 4-2-2024
@@ -28,7 +31,9 @@
 
 ## 🚧 TODO
 
-🔲 Frontend not done at all: CSS styling coming up.
+🔲 ❌ Frontend not done at all: CSS styling coming up. ❌
+
+🔲 ❌ All database tables are not used: group feature coming up  ❌
 
 🔲 Tests for existing features
 
@@ -39,20 +44,19 @@
 
 ### Features
 
+🔲 **Create a group of friends:** User can create new group which can start their own list
 
-🔲 **Ending soon -tag:** The application reminds about upcoming exhibitions that are about to end soon (eg within two weeks)
+🔲 **Join existing group of friends:** User can create new group which can start their own list
 
 🔲 **Sorting Exhibitions:** Exhibitions can be organized chronologically to see which ones are ending soon
 
 🔲 **Delete exhibitions:** User can delete exhibition should they have admin rights
 
+🔲 **Ending soon -tag:** The application reminds about upcoming exhibitions that are about to end soon (eg within two weeks)
+
+
 🔲 **Mark visited:** User can mark if they have already visited the exhibition
 
-🔲 **Create a group of friends:** User can create new group which can start their own list
-
-🔲 **Join existing group of friends:** User can create new group which can start their own list
-
-🔲 **Past exhibitions:** User can see exhibitions that already ended
 
 
 ### Bonus:
