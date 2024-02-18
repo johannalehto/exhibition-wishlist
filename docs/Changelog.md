@@ -25,6 +25,7 @@
 
 ### Features
 
+🔲 **Search for museums:** User can choose a museum from a list of existing museums
 
 🔲 **Tracking Attendance:** Users can mark which exhibitions they plan to attend
 
@@ -32,7 +33,16 @@
 
 🔲 **Sorting Exhibitions:** Exhibitions can be organized chronologically to see which ones are ending soon
 
+🔲 **Delete exhibitions:** User can delete exhibition should they have admin rights
+
 🔲 **Mark visited:** User can mark if they have already visited the exhibition
+
+🔲 **Create a group of friends:** User can create new group which can start their own list
+
+🔲 **Join existing group of friends:** User can create new group which can start their own list
+
+🔲 **Past exhibitions:** User can see exhibitions that already ended
+
 
 ### Bonus:
 🔲 **Openings:** an extra section for approaching opening or other events?
@@ -49,6 +59,8 @@
 ✅ **Exhibitions:** details such as name, location, description, start and end dates, (ending soon -tag?)
 
 ✅ **Users per exhibitions:** tracking which users plan to attend which exhibitions, or if the users have already visited them (or should those be separate tables)
+
+🔲 **Groups:** User can create new group which can start their own wishlist
 
 🔲 **Reminders:** approaching exhibition end dates
 
