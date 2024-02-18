@@ -34,14 +34,18 @@
                     {% for attendee in exhibition.attendees %}
                         {{attendee['first_name']}}
                     {% endfor %}
-                {% endif %}
                 </h3>
-                <form action="/join_exhibition" method="POST">
-                    <input type="hidden" name="exhibition_id" value="{{ exhibition.id }}">
-                    <button type="submit" class="btn btn-primary">Going</button>
-                </form>
-            {% endif %}
-
-
-<hr>
+                {% endif %}
+                    <form action="/join_exhibition" method="POST">
+                        <input type="hidden" name="exhibition_id" value="{{ exhibition.id }}">
+                        <button class="btn {{ 'btn-dark' if exhibition.is_attending else 'btn-primary' }}">
+                            {% if exhibition.is_attending %}
+                            Going
+                            {% else %}
+                            Join
+                            {% endif %}
+                        </button>
+                    </form>
+                {% endif %}
+            <hr>
         {% endfor %}

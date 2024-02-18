@@ -64,6 +64,10 @@ def index():
     all_exhibitions = get_exhibitions()
 
     username = session.get("username")
+    user_id = session.get("user_id")
+
+    for exhibition in all_exhibitions:
+        exhibition['is_attending'] = any(user_id == attendee[0] for attendee in exhibition['attendees'])
     return render_template(
         "index.html", all_exhibitions=all_exhibitions, username=username
     )
@@ -97,8 +101,6 @@ def create_exhibition():
 def join_exhibition():
     user_id = session.get("user_id")
     exhibition_id = request.form.get("exhibition_id")
-    print("&&&& user id here::::", user_id)
-    print("&&&& exhibition id here:", exhibition_id)
     if user_id and exhibition_id:
         add_user_to_exhibition(user_id, exhibition_id)
         flash("Joined")

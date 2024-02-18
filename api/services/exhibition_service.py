@@ -64,6 +64,7 @@ def get_exhibitions():
         exhibition['days_left'] = get_days_left(exhibition['end_date'])
         exhibition['attendees'] = get_attendees(exhibition['id'])
 
+
         all_exhibitions.append(exhibition)
 
     return all_exhibitions
