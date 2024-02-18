@@ -70,7 +70,7 @@ def get_current_exhibitions():
         ORDER BY e.end_date ASC
     """
     )
-    result = db.session.execute(sql, {'now': now})
+    result = db.session.execute(sql, {"now": now})
     current_exhibitions_from_db = result.fetchall()
 
     current_exhibitions = []
@@ -84,19 +84,20 @@ def get_current_exhibitions():
 
     return current_exhibitions
 
+
 def get_past_exhibitions():
     now = datetime.utcnow().date().isoformat()
 
     sql = text(
         """
-        SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name 
+        SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name
         FROM exhibitions e
         JOIN museums m ON e.museum_id = m.id
         WHERE e.end_date < :now
         ORDER BY e.end_date DESC
     """
     )
-    result = db.session.execute(sql, {'now': now})
+    result = db.session.execute(sql, {"now": now})
     past_exhibitions_from_db = result.fetchall()
 
     past_exhibitions = []
@@ -107,7 +108,6 @@ def get_past_exhibitions():
         past_exhibitions.append(exhibition)
 
     return past_exhibitions
-
 
 
 def handle_museum(museum_name: str) -> int:

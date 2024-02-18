@@ -1,5 +1,5 @@
 import secrets
-from os import getenv, abort
+from os import getenv
 
 from flask import flash, redirect, render_template, request, session, url_for
 
@@ -7,8 +7,9 @@ from api.app import app
 from api.services.exhibition_service import (add_user_to_exhibition,
                                              check_missing_fields,
                                              create_new_exhibition,
-                                             get_museums,
-                                             remove_user_from_exhibition, get_current_exhibitions, get_past_exhibitions)
+                                             get_current_exhibitions,
+                                             get_museums, get_past_exhibitions,
+                                             remove_user_from_exhibition)
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -73,14 +74,14 @@ def index():
     user_id = session.get("user_id")
 
     for exhibition in current_exhibitions:
-        exhibition["is_attending"] = any( # TODO fix this hack
+        exhibition["is_attending"] = any(  # TODO fix this hack
             user_id == attendee[0] for attendee in exhibition["attendees"]
         )
     return render_template(
         "index.html",
         current_exhibitions=current_exhibitions,
         past_exhibitions=past_exhibitions,
-        username=username
+        username=username,
     )
 
 
