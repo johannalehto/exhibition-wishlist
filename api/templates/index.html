@@ -30,6 +30,7 @@
 {% endif %}
     <h2>Currently open Exhibitions:</h2>
     <hr>
+    {% if current_exhibitions %}
         {% for exhibition in current_exhibitions %}
             <p>{{ exhibition.start_date.strftime('%d.%m.%Y') }} - {{ exhibition.end_date.strftime('%d.%m.%Y') }}</p>
             <h3>{{ exhibition.exhibition_name }}</h3>
@@ -55,6 +56,17 @@
             {% endif %}
             <hr>
         {% endfor %}
+    {% else %}
+        <p>No exhibitions added</p>
+<!--        TODO: check later if the button is still relevant-->
+        {% if username %}
+            <form action="/add_exhibition" method="GET">
+            <button type="submit" class="btn btn-primary">Add exhibition</button>
+            </form>
+        {% endif %}
+    {% endif %}
+
+
     <hr>
     <h2>Past exhibitions:</h2>
     <hr>
