@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS users_exhibitions (
 CREATE TABLE IF NOT EXISTS groups (
     id SERIAL PRIMARY KEY,
     group_name TEXT,
-    group_description TEXT,
+    group_description TEXT
 );
 
 CREATE TABLE IF NOT EXISTS groups_users (
