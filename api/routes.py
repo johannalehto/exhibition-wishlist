@@ -4,12 +4,13 @@ from os import getenv
 from flask import flash, redirect, render_template, request, session, url_for
 
 from api.app import app
+from api.services.common_service import check_missing_fields
 from api.services.exhibition_service import (add_user_to_exhibition,
-                                             check_missing_fields,
                                              create_new_exhibition,
                                              get_current_exhibitions,
                                              get_museums, get_past_exhibitions,
                                              remove_user_from_exhibition)
+from api.services.group_service import create_new_group
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -98,7 +99,13 @@ def create_exhibition():
         flash("Something went wrong, please try again.")
         return redirect(url_for("index"))
 
-    if check_missing_fields():
+    required_fields = [
+        "exhibition_name",
+        "museum_name",
+        "start_date",
+        "end_date",
+    ]
+    if check_missing_fields(required_fields):
         return redirect("/add_exhibition")
     new_exhibition = create_new_exhibition(
         exhibition_name=request.form["exhibition_name"],
@@ -127,3 +134,24 @@ def leave_exhibition(exhibition_id):
     if user_id and exhibition_id:
         remove_user_from_exhibition(user_id, exhibition_id)
     return redirect(url_for("index"))
+
+
+@app.route("/create_group", methods=["POST"])
+def create_group():
+    # TODO: create a separate method for csrf
+    if session["csrf_token"] != request.form["csrf_token"]:
+        flash("Something went wrong, please try again.")
+        return redirect(url_for("index"))
+
+    required_fields = ["group_name"]
+    if check_missing_fields(required_fields):
+        return redirect("/create_group")
+    new_group = create_new_group(
+        group_name=request.form["group_name"],
+        group_description=request.form["group_description"],
+    )
+    if new_group[0]:
+        flash(new_group[1])
+        return redirect(url_for("index"))
+    flash(new_group[1])
+    return redirect(url_for("create_group"))
