@@ -86,7 +86,7 @@ def get_current_exhibitions():
         current_exhibitions.append(exhibition)
 
     return current_exhibitions
-
+    # TODO extract creating exhibition dict and db query
 
 def get_past_exhibitions():
     now = datetime.utcnow().date().isoformat()

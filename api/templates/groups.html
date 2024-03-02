@@ -1,0 +1,50 @@
+ <h2>My groups:</h2>
+    <hr>
+    {% if all_groups_by_user %}
+        {% for group in all_groups_by_user %}
+            <h3>{{ group.group_name }}</h3>
+            <p>{{ group.group_description }}</p>
+                {% if group.members %}
+                <h3>Interested:
+                    {% for member in group.members %}
+                        {{member['first_name']}}
+                    {% endfor %}
+                </h3>
+                {% endif %}
+                <form action="{{ url_for('leave_group', group_id=group.id) }}" method="POST">
+                    <button class="btn btn-dark">Leave</button>
+                </form>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No groups</p>
+        <form action="{{ url_for('add_group') }}" method="GET">
+            <button class="btn btn-dark">Create a new group</button>
+        </form>
+    {% endif %}
+
+    <hr>
+    <h2>All groups:</h2>
+    <hr>
+    {% if all_groups %}
+        {% for group in all_groups %}
+            <h3>{{ group.group_name }}</h3>
+            <p>{{ group.group_description }}</p>
+                {% if group.members %}
+                <p>members:
+                    {% for member in group.members %}
+                        {{member['first_name']}}
+                    {% endfor %}
+                </p>
+                {% endif %}
+                <form action="{{ url_for('join_group', group_id=group.id) }}" method="POST">
+                    <button class="btn btn-dark">Join</button>
+                </form>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No other groups added</p>
+        <form action="{{ url_for('add_group') }}" method="GET">
+            <button class="btn btn-dark">Create a new group</button>
+        </form>
+    {% endif %}

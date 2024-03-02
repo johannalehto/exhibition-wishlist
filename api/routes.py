@@ -10,7 +10,8 @@ from api.services.exhibition_service import (add_user_to_exhibition,
                                              get_current_exhibitions,
                                              get_museums, get_past_exhibitions,
                                              remove_user_from_exhibition)
-from api.services.group_service import create_new_group
+from api.services.group_service import create_new_group, get_groups_by_user_id, get_all_groups_by_user, \
+    remove_user_from_group, add_user_to_group, get_all_groups
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -136,6 +137,23 @@ def leave_exhibition(exhibition_id):
     return redirect(url_for("index"))
 
 
+@app.route("/groups", methods=["GET", "POST"])
+def groups():
+    user_id = session.get("user_id")
+    all_groups_by_user = get_all_groups_by_user(user_id)
+    all_groups = get_all_groups(user_id)
+
+    return render_template(
+        "groups.html",
+        all_groups_by_user=all_groups_by_user,
+        all_groups=all_groups
+    )
+
+
+@app.route("/add_group", methods=["GET"])
+def add_group():
+    return render_template("add_group.html")
+
 @app.route("/create_group", methods=["POST"])
 def create_group():
     # TODO: create a separate method for csrf
@@ -154,4 +172,19 @@ def create_group():
         flash(new_group[1])
         return redirect(url_for("index"))
     flash(new_group[1])
-    return redirect(url_for("create_group"))
+    return redirect(url_for("add_group"))
+
+@app.route("/join_group/<int:group_id>", methods=["POST"])
+def join_group(group_id: int):
+    user_id: int = session.get("user_id")
+    if user_id and group_id:
+        add_user_to_group(user_id, group_id)
+    return redirect(url_for("groups"))
+
+
+@app.route("/leave_group/<int:group_id>", methods=["POST"])
+def leave_group(group_id: int):
+    user_id: int = session.get("user_id")
+    if user_id and group_id:
+        remove_user_from_group(user_id, group_id)
+    return redirect(url_for("groups"))
