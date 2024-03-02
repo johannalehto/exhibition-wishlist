@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from flask import flash, request
 from sqlalchemy import text
 
 from api.db import db
@@ -25,7 +24,9 @@ def remove_user_from_exhibition(user_id, exhibition_id):
         WHERE user_id = :user_id AND exhibition_id = :exhibition_id
         """
     )
-    db.session.execute(sql, {"user_id": user_id, "exhibition_id": exhibition_id})
+    db.session.execute(
+        sql, {"user_id": user_id, "exhibition_id": exhibition_id}
+    )
     db.session.commit()
 
 
@@ -53,7 +54,9 @@ def get_attendees(query_exhibition_id) -> list | None:
         """
     )
 
-    result = db.session.execute(sql, {"query_exhibition_id": query_exhibition_id})
+    result = db.session.execute(
+        sql, {"query_exhibition_id": query_exhibition_id}
+    )
     all_attendees = result.fetchall()
     return all_attendees
 
@@ -119,26 +122,16 @@ def handle_museum(museum_name: str) -> int:
         return existing_museum_id[0]
     else:
         sql = text(
-            "INSERT INTO museums (museum_name) VALUES (:museum_name) RETURNING id"
+            """
+            INSERT INTO museums (museum_name)
+            VALUES (:museum_name)
+            RETURNING id
+        """
         )
         result = db.session.execute(sql, {"museum_name": museum_name})
         new_museum_id = result.fetchone()
         db.session.commit()
         return new_museum_id[0]
-
-
-def check_missing_fields():
-    required_fields = ["exhibition_name", "museum_name", "start_date", "end_date"]
-
-    missing_fields = [
-        field.replace("_", " ").capitalize()
-        for field in required_fields
-        if not request.form.get(field, "").strip()
-    ]
-    if missing_fields:
-        flash(f'Please fill in: {", ".join(missing_fields)}')
-        return True
-    return False
 
 
 def create_new_exhibition(
@@ -158,9 +151,11 @@ def create_new_exhibition(
     }
     sql = text(
         """
-        INSERT INTO exhibitions (exhibition_name, museum_id, start_date, end_date)
-        VALUES (:exhibition_name, :museum_id, :start_date, :end_date)
-        """
+            INSERT INTO exhibitions
+            (exhibition_name, museum_id, start_date, end_date)
+            VALUES
+            (:exhibition_name, :museum_id, :start_date, :end_date)
+    """
     )
 
     db.session.execute(sql, new_exhibition)

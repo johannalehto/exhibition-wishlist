@@ -1,0 +1,19 @@
+<h2>Create a new group</h2>
+
+<form action="/create_group" method="POST">
+    Group name:
+    <input type="text" name="group_name" required>
+    Description (optional):
+    <input type="text" name="group_description">
+
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    <input type="submit" value="Create group">
+</form>
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    {% for message in messages %}
+        <strong>{{message}}</strong>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
