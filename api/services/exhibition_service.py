@@ -91,7 +91,6 @@ def get_current_exhibitions():
         current_exhibitions.append(exhibition)
 
     return current_exhibitions
-    # TODO extract creating exhibition dict and db query
 
 def get_past_exhibitions():
     now = datetime.utcnow().date().isoformat()
@@ -184,7 +183,6 @@ def create_new_exhibition(
     new_exhibition_id = result.fetchone()[0]
     db.session.commit()
 
-    print('&&& new_exhibition_id :', new_exhibition_id)
     add_exhibition_to_group(new_exhibition_id, group_id)
 
     return True, "Added exhibition succesfully"
@@ -219,7 +217,6 @@ def get_current_exhibitions_by_group(query_group_id: int):
         current_exhibitions.append(exhibition)
 
     return current_exhibitions
-    # TODO extract creating exhibition dict and db query
 
 def get_past_exhibitions_by_group(query_group_id: int):
     now = datetime.utcnow().date().isoformat()
