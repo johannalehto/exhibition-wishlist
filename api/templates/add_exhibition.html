@@ -16,6 +16,12 @@
     <input type="date" name="end_date" required>
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     <input type="submit" value="Add">
+    <label for="group">Group:</label>
+    <select name="group_id" id="group">
+        {% for group in groups %}
+            <option value="{{ group.id }}">{{ group.group_name }}</option>
+        {% endfor %}
+    </select>
 </form>
 
 {% with messages = get_flashed_messages() %}

@@ -12,7 +12,7 @@ from api.services.exhibition_service import (add_user_to_exhibition,
                                              remove_user_from_exhibition, is_user_attending,
                                              get_current_exhibitions_by_group, get_past_exhibitions_by_group)
 from api.services.group_service import create_new_group, get_all_groups_by_user, \
-    remove_user_from_group, add_user_to_group, get_groups_without_user, get_selected_group
+    remove_user_from_group, add_user_to_group, get_groups_without_user, get_selected_group, get_groups_by_user_id
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -89,8 +89,14 @@ def index():
 
 @app.route("/add_exhibition", methods=["GET"])
 def add_exhibition():
+    user_id = session.get("user_id")
     museum_names = get_museums()
-    return render_template("add_exhibition.html", museum_names=museum_names)
+    groups = get_groups_by_user_id(user_id)
+    return render_template(
+        "add_exhibition.html",
+        museum_names=museum_names,
+        groups=groups
+    )
 
 
 @app.route("/create_exhibition", methods=["POST"])
@@ -105,6 +111,7 @@ def create_exhibition():
         "museum_name",
         "start_date",
         "end_date",
+        "group_id"
     ]
     if check_missing_fields(required_fields):
         return redirect("/add_exhibition")
@@ -113,7 +120,9 @@ def create_exhibition():
         museum_name=request.form["museum_name"],
         start_date=request.form["start_date"],
         end_date=request.form["end_date"],
+        group_id=request.form["group_id"]
     )
+
     if new_exhibition[0]:
         flash(new_exhibition[1])
         return redirect(url_for("index"))

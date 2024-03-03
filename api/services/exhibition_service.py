@@ -139,11 +139,27 @@ def handle_museum(museum_name: str) -> int:
         return new_museum_id[0]
 
 
+def add_exhibition_to_group(exhibition_id, group_id):
+    sql = text("""
+        INSERT INTO groups_exhibitions (group_id, exhibition_id)
+        VALUES (:group_id, :exhibition_id)
+    """)
+    try:
+        db.session.execute(sql, {"group_id": group_id, "exhibition_id": exhibition_id})
+        db.session.commit()
+    except Exception:
+        print('error adding exhibition to group')
+        return False
+    print('added exhibition to group')
+    return True
+
+
 def create_new_exhibition(
     exhibition_name,
     museum_name,
     start_date,
     end_date,
+    group_id
 ):
 
     museum_id = handle_museum(museum_name)
@@ -160,11 +176,16 @@ def create_new_exhibition(
             (exhibition_name, museum_id, start_date, end_date)
             VALUES
             (:exhibition_name, :museum_id, :start_date, :end_date)
+            RETURNING id
     """
     )
 
-    db.session.execute(sql, new_exhibition)
+    result = db.session.execute(sql, new_exhibition)
+    new_exhibition_id = result.fetchone()[0]
     db.session.commit()
+
+    print('&&& new_exhibition_id :', new_exhibition_id)
+    add_exhibition_to_group(new_exhibition_id, group_id)
 
     return True, "Added exhibition succesfully"
 
@@ -177,7 +198,7 @@ def get_current_exhibitions_by_group(query_group_id: int):
         SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name
         FROM exhibitions e
         JOIN museums m ON e.museum_id = m.id
-        JOIN groups_exhibitions ge ON e.id = ge.exhibitions_id
+        JOIN groups_exhibitions ge ON e.id = ge.exhibition_id
         JOIN groups g ON ge.group_id = g.id
         WHERE e.end_date >= :now
         AND g.id = :query_group_id
@@ -208,7 +229,7 @@ def get_past_exhibitions_by_group(query_group_id: int):
         SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name
         FROM exhibitions e
         JOIN museums m ON e.museum_id = m.id
-        JOIN groups_exhibitions ge ON e.id = ge.exhibitions_id
+        JOIN groups_exhibitions ge ON e.id = ge.exhibition_id
         JOIN groups g ON ge.group_id = g.id
         WHERE e.end_date < :now
         AND g.id = :query_group_id

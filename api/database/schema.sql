@@ -38,5 +38,5 @@ CREATE TABLE IF NOT EXISTS groups_users (
 
 CREATE TABLE IF NOT EXISTS groups_exhibitions (
     group_id INT REFERENCES groups(id),
-    exhibitions_id INT REFERENCES exhibitions(id)
+    exhibition_id INT REFERENCES exhibitions(id)
 );
