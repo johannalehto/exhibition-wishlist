@@ -110,12 +110,14 @@ def display_exhibitions():
 @app.route("/add_exhibition", methods=["GET"])
 def add_exhibition():
     user_id = session.get("user_id")
+    username = session.get("username")
     museum_names = get_museums()
     groups = get_groups_by_user_id(user_id)
     return render_template(
         "add_exhibition.html",
         museum_names=museum_names,
-        groups=groups
+        groups=groups,
+        username=username
     )
 
 
@@ -174,19 +176,22 @@ def leave_exhibition(exhibition_id):
 @app.route("/groups", methods=["GET", "POST"])
 def groups():
     user_id = session.get("user_id")
+    username = session.get("username")
     all_groups_by_user = get_all_groups_by_user(user_id)
     groups_without_user = get_groups_without_user(user_id)
 
     return render_template(
         "groups.html",
         all_groups_by_user=all_groups_by_user,
-        groups_without_user=groups_without_user
+        groups_without_user=groups_without_user,
+        username=username
     )
 
 
 @app.route("/add_group", methods=["GET"])
 def add_group():
-    return render_template("add_group.html")
+    username = session.get("username")
+    return render_template("add_group.html", username=username)
 
 @app.route("/create_group", methods=["POST"])
 def create_group():
