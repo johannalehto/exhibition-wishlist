@@ -9,9 +9,10 @@ from api.services.exhibition_service import (add_user_to_exhibition,
                                              create_new_exhibition,
                                              get_current_exhibitions,
                                              get_museums, get_past_exhibitions,
-                                             remove_user_from_exhibition)
-from api.services.group_service import create_new_group, get_groups_by_user_id, get_all_groups_by_user, \
-    remove_user_from_group, add_user_to_group, get_all_groups
+                                             remove_user_from_exhibition, is_user_attending,
+                                             get_current_exhibitions_by_group, get_past_exhibitions_by_group)
+from api.services.group_service import create_new_group, get_all_groups_by_user, \
+    remove_user_from_group, add_user_to_group, get_groups_without_user, get_selected_group
 from api.services.user_service import create_new_user, create_user_session
 
 app.secret_key = getenv("SECRET_KEY")
@@ -76,9 +77,8 @@ def index():
     user_id = session.get("user_id")
 
     for exhibition in current_exhibitions:
-        exhibition["is_attending"] = any(  # TODO fix this hack
-            user_id == attendee[0] for attendee in exhibition["attendees"]
-        )
+        exhibition["is_attending"] = is_user_attending(user_id, exhibition["attendees"])
+
     return render_template(
         "index.html",
         current_exhibitions=current_exhibitions,
@@ -117,6 +117,7 @@ def create_exhibition():
     if new_exhibition[0]:
         flash(new_exhibition[1])
         return redirect(url_for("index"))
+    # TODO: check the error message here
     flash(new_exhibition[1])
     return redirect(url_for("add_exhibition"))
 
@@ -141,12 +142,12 @@ def leave_exhibition(exhibition_id):
 def groups():
     user_id = session.get("user_id")
     all_groups_by_user = get_all_groups_by_user(user_id)
-    all_groups = get_all_groups(user_id)
+    groups_without_user = get_groups_without_user(user_id)
 
     return render_template(
         "groups.html",
         all_groups_by_user=all_groups_by_user,
-        all_groups=all_groups
+        groups_without_user=groups_without_user
     )
 
 
@@ -188,3 +189,28 @@ def leave_group(group_id: int):
     if user_id and group_id:
         remove_user_from_group(user_id, group_id)
     return redirect(url_for("groups"))
+
+@app.route('/display_exhibitions', methods=["GET", "POST"])
+def display_exhibitions():
+    username = session.get('username')
+    user_id = session.get("user_id")
+    if not username:
+        return redirect(url_for('login'))
+
+    all_groups_by_user = get_all_groups_by_user(user_id)
+    selected_group_id = request.args.get('group_id')
+    current_exhibitions = []
+    past_exhibitions = []
+    if selected_group_id:
+        current_exhibitions = get_current_exhibitions_by_group(int(selected_group_id))
+        past_exhibitions = get_past_exhibitions_by_group(int(selected_group_id))
+
+    for exhibition in current_exhibitions:
+        exhibition["is_attending"] = is_user_attending(user_id, exhibition["attendees"])
+
+
+    return render_template(
+        'exhibitions.html',
+        groups=all_groups_by_user,
+        current_exhibitions=current_exhibitions,
+        past_exhibitions=past_exhibitions)

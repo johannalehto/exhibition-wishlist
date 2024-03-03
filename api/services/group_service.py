@@ -21,6 +21,7 @@ def create_new_group(
     db.session.execute(sql, new_group)
     db.session.commit()
 
+    # TODO:
     return True, "Added group succesfully"
 
 def add_user_to_group(user_id: int, group_id: int):
@@ -47,7 +48,7 @@ def remove_user_from_group(user_id: int, group_id: int):
     )
     db.session.commit()
 
-def get_groups_by_user_id(query_user_id) -> list:
+def get_groups_by_user_id(query_user_id: int) -> list:
     sql = text(
         """
         SELECT g.id, g.group_name, g.group_description
@@ -90,7 +91,7 @@ def get_all_groups_by_user(user_id: int) -> list:
         all_groups_by_user.append(group)
     return all_groups_by_user
 
-def get_all_groups(query_user_id: int) -> list:
+def get_groups_without_user(query_user_id: int) -> list:
     # gets all the groups user is not a member of
     sql = text(
         """
@@ -107,6 +108,22 @@ def get_all_groups(query_user_id: int) -> list:
     result = db.session.execute(
         sql, {"query_user_id": query_user_id}
     )
-    all_groups = result.fetchall()
-    return all_groups
+    groups_without_user = result.fetchall()
+    return groups_without_user
+
+def get_selected_group(query_group_id: int):
+    sql = text(
+        """
+        SELECT g.id, g.group_name, g.group_description
+        FROM groups g
+        WHERE g.id = :query_group_id;
+        """
+    )
+    result = db.session.execute(
+        sql, {"query_group_id": query_group_id}
+    )
+    return result.fetchone()
+
+
+
 

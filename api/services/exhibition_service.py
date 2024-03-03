@@ -60,6 +60,11 @@ def get_attendees(query_exhibition_id) -> list | None:
     all_attendees = result.fetchall()
     return all_attendees
 
+def is_user_attending(user_id: int, attendees: list) -> bool:
+    for attendee in attendees:
+        if user_id == attendee[0]:
+            return True
+    return False
 
 def get_current_exhibitions():
     now = datetime.utcnow().date().isoformat()
@@ -162,3 +167,63 @@ def create_new_exhibition(
     db.session.commit()
 
     return True, "Added exhibition succesfully"
+
+
+def get_current_exhibitions_by_group(query_group_id: int):
+    now = datetime.utcnow().date().isoformat()
+
+    sql = text(
+        """
+        SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name
+        FROM exhibitions e
+        JOIN museums m ON e.museum_id = m.id
+        JOIN groups_exhibitions ge ON e.id = ge.exhibitions_id
+        JOIN groups g ON ge.group_id = g.id
+        WHERE e.end_date >= :now
+        AND g.id = :query_group_id
+        ORDER BY e.end_date ASC
+
+    """
+    )
+    result = db.session.execute(sql, {"now": now, "query_group_id": query_group_id})
+    current_exhibitions_from_db = result.fetchall()
+
+    current_exhibitions = []
+    for db_exhibition in current_exhibitions_from_db:
+        exhibition = db_exhibition._asdict()
+
+        exhibition["days_left"] = get_days_left(exhibition["end_date"])
+        exhibition["attendees"] = get_attendees(exhibition["id"])
+
+        current_exhibitions.append(exhibition)
+
+    return current_exhibitions
+    # TODO extract creating exhibition dict and db query
+
+def get_past_exhibitions_by_group(query_group_id: int):
+    now = datetime.utcnow().date().isoformat()
+
+    sql = text(
+        """
+        SELECT e.id, e.exhibition_name, e.start_date, e.end_date, m.museum_name
+        FROM exhibitions e
+        JOIN museums m ON e.museum_id = m.id
+        JOIN groups_exhibitions ge ON e.id = ge.exhibitions_id
+        JOIN groups g ON ge.group_id = g.id
+        WHERE e.end_date < :now
+        AND g.id = :query_group_id
+        ORDER BY e.end_date DESC
+    """
+
+    )
+    result = db.session.execute(sql, {"now": now, "query_group_id": query_group_id})
+    past_exhibitions_from_db = result.fetchall()
+
+    past_exhibitions = []
+    for db_exhibition in past_exhibitions_from_db:
+        exhibition = db_exhibition._asdict()
+        exhibition["attendees"] = get_attendees(exhibition["id"])
+
+        past_exhibitions.append(exhibition)
+
+    return past_exhibitions
