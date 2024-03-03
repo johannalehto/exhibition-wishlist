@@ -1,33 +1,40 @@
-<h2>Add exhibition</h2>
+{% extends "base.html" %}
 
-<form action="/create_exhibition" method="POST">
-    Exhibition:
-    <input type="text" name="exhibition_name" required>
-    Museum:
-    <input type="text" id="museum_name" name="museum_name" list="museum_list" required>
-        <datalist id="museum_list">
-            {% for name in museum_names %}
-            <option value="{{ name }}">
+{% block content %}
+<div>
+    <h2>Add exhibition</h2>
+
+    <form action="/create_exhibition" method="POST">
+        Exhibition:
+        <input type="text" name="exhibition_name" required>
+        Museum:
+        <input type="text" id="museum_name" name="museum_name" list="museum_list" required>
+            <datalist id="museum_list">
+                {% for name in museum_names %}
+                <option value="{{ name }}">
+                {% endfor %}
+            </datalist>
+        Start date:
+        <input type="date" name="start_date" required>
+        End date:
+        <input type="date" name="end_date" required>
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="submit" value="Add">
+        <label for="group">Group:</label>
+        <select name="group_id" id="group">
+            {% for group in groups %}
+                <option value="{{ group.id }}">{{ group.group_name }}</option>
             {% endfor %}
-        </datalist>
-    Start date:
-    <input type="date" name="start_date" required>
-    End date:
-    <input type="date" name="end_date" required>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    <input type="submit" value="Add">
-    <label for="group">Group:</label>
-    <select name="group_id" id="group">
-        {% for group in groups %}
-            <option value="{{ group.id }}">{{ group.group_name }}</option>
-        {% endfor %}
-    </select>
-</form>
+        </select>
+    </form>
 
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-        <strong>{{message}}</strong>
-    {% endfor %}
-  {% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+            <strong>{{message}}</strong>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}
+

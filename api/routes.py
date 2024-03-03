@@ -68,23 +68,43 @@ def logout():
     return redirect(url_for("login_page"))
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def index():
-    current_exhibitions = get_current_exhibitions()
-    past_exhibitions = get_past_exhibitions()
+    if 'username' in session:
+        return redirect(url_for('display_exhibitions'))
+    return render_template('index.html')
 
-    username = session.get("username")
+@app.route('/display_exhibitions', methods=["GET", "POST"])
+def display_exhibitions():
+    username = session.get('username')
     user_id = session.get("user_id")
+    if not username:
+        flash("Please login to view exhibitions.")
+        return redirect(url_for('login'))
+
+    all_groups_by_user = get_all_groups_by_user(user_id)
+    selected_group_id = request.args.get('group_id')
+
+    if not selected_group_id and all_groups_by_user:
+        selected_group_id = all_groups_by_user[0]["id"]
+
+    current_exhibitions = []
+    past_exhibitions = []
+    if selected_group_id:
+        selected_group_id = int(selected_group_id)
+        current_exhibitions = get_current_exhibitions_by_group(selected_group_id)
+        past_exhibitions = get_past_exhibitions_by_group(selected_group_id)
 
     for exhibition in current_exhibitions:
         exhibition["is_attending"] = is_user_attending(user_id, exhibition["attendees"])
 
     return render_template(
-        "index.html",
+        'exhibitions.html',
+        groups=all_groups_by_user,
         current_exhibitions=current_exhibitions,
         past_exhibitions=past_exhibitions,
-        username=username,
-    )
+        selected_group_id=selected_group_id,
+        username=username)
 
 
 @app.route("/add_exhibition", methods=["GET"])
@@ -124,27 +144,31 @@ def create_exhibition():
     )
 
     if new_exhibition[0]:
-        flash(new_exhibition[1])
-        return redirect(url_for("index"))
+        flash("Exhibition added successfully.")
+        return redirect(
+            url_for("display_exhibitions",
+                    group_id=request.form["group_id"]))
     # TODO: check the error message here
-    flash(new_exhibition[1])
+    flash("Failed to add exhibition. Please try again.")
     return redirect(url_for("add_exhibition"))
 
 
 @app.route("/join_exhibition/<int:exhibition_id>", methods=["POST"])
 def join_exhibition(exhibition_id):
     user_id = session.get("user_id")
+    group_id = request.form.get("group_id")
     if user_id and exhibition_id:
         add_user_to_exhibition(user_id, exhibition_id)
-    return redirect(url_for("index"))
+    return redirect(url_for("display_exhibitions", group_id=group_id))
 
 
 @app.route("/leave_exhibition/<int:exhibition_id>", methods=["POST"])
 def leave_exhibition(exhibition_id):
     user_id = session.get("user_id")
+    group_id = request.form.get("group_id")
     if user_id and exhibition_id:
         remove_user_from_exhibition(user_id, exhibition_id)
-    return redirect(url_for("index"))
+    return redirect(url_for("display_exhibitions", group_id=group_id))
 
 
 @app.route("/groups", methods=["GET", "POST"])
@@ -169,7 +193,7 @@ def create_group():
     # TODO: create a separate method for csrf
     if session["csrf_token"] != request.form["csrf_token"]:
         flash("Something went wrong, please try again.")
-        return redirect(url_for("index"))
+        return redirect(url_for("display_exhibitions"))
 
     required_fields = ["group_name"]
     if check_missing_fields(required_fields):
@@ -180,7 +204,7 @@ def create_group():
     )
     if new_group[0]:
         flash(new_group[1])
-        return redirect(url_for("index"))
+        return redirect(url_for("display_exhibitions"))
     flash(new_group[1])
     return redirect(url_for("add_group"))
 
@@ -199,27 +223,4 @@ def leave_group(group_id: int):
         remove_user_from_group(user_id, group_id)
     return redirect(url_for("groups"))
 
-@app.route('/display_exhibitions', methods=["GET", "POST"])
-def display_exhibitions():
-    username = session.get('username')
-    user_id = session.get("user_id")
-    if not username:
-        return redirect(url_for('login'))
 
-    all_groups_by_user = get_all_groups_by_user(user_id)
-    selected_group_id = request.args.get('group_id')
-    current_exhibitions = []
-    past_exhibitions = []
-    if selected_group_id:
-        current_exhibitions = get_current_exhibitions_by_group(int(selected_group_id))
-        past_exhibitions = get_past_exhibitions_by_group(int(selected_group_id))
-
-    for exhibition in current_exhibitions:
-        exhibition["is_attending"] = is_user_attending(user_id, exhibition["attendees"])
-
-
-    return render_template(
-        'exhibitions.html',
-        groups=all_groups_by_user,
-        current_exhibitions=current_exhibitions,
-        past_exhibitions=past_exhibitions)

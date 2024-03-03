@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Exhibition Wishlist{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <h1>Exhibition Wishlist</h1>
+        {% if username %}
+        <p>Logged in as: <strong>{{ username }}</strong></p>
+        <form action="/logout" method="GET">
+            <button type="submit" class="btn btn-primary">Logout</button>
+        </form>
+        <form action="{{ url_for('groups') }}" method="GET">
+            <button class="btn btn-dark">My groups</button>
+        </form>
+        {% else %}
+        <form action="/login_page" method="GET">
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form> or
+        <form action="/sign_up_page" method="GET">
+            <button type="submit" class="btn btn-primary">Sign up</button>
+        </form>
+        {% endif %}
+        <hr>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+    </footer>
+</body>
+</html>
