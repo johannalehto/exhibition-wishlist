@@ -29,7 +29,13 @@
             {% endif %}
         </div>
     </div>
-
+    {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+                <strong>{{message}}</strong>
+            {% endfor %}
+          {% endif %}
+    {% endwith %}
     <main class="container">
         {% block content %}{% endblock %}
     </main>
