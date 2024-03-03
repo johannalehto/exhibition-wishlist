@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+    background-color: #EDE7F6; /*  lila */
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+}
+
+input[type=text], input[type=password], input[type=date], select {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #CCC;
+    border-radius: 5px;
+}
+button, input[type=submit] {
+    background-color: #7E57C2; /* even darker lila */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin: 4px 2px;
+}
+button:hover, input[type=submit]:hover {
+    background-color: #673AB7;
+}
+a {
+    color: #7E57C2;
+}
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+.top-banner {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+}
+
+.top-banner h1 {
+    margin: 0;
+    font-weight: normal;
+}
+
+.top-banner .navi {
+    display: flex;
+    align-items: center;
+}
+
+.top-banner .navi p {
+    margin-right: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+}
+
+form input[type=text],
+form input[type=password],
+form input[type=date],
+form input[type=submit],
+form select {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 80%;
+}
+
+form input[type=submit] {
+    background-color: #7E57C2;
+    color: white;
+    cursor: pointer;
+}
+
+form input[type=submit]:hover {
+    background-color: #673AB7;
+}
+
+label {
+    align-self: flex-start;
+    margin-left: 10%;
+}

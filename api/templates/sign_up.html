@@ -1,20 +1,24 @@
-<h2>Sign up</h2>
-
-<form action="/create_user" method="POST">
-    New username:
-    <input type="text" name="username" required>
-    New password:
-    <input type="password" name="password_first" required>
-    Confirm password:
-    <input type="password" name="password_second" required>
-    First name:
-    <input type="text" name="first_name" required>
-    <input type="submit" value="Send">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        {% for message in messages %}
-            <strong>{{message}}</strong>
-        {% endfor %}
-      {% endif %}
-    {% endwith %}
-</form>
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <form action="/create_user" method="POST">
+        <h2>Sign up</h2>
+        New username:
+        <input type="text" name="username" required>
+        New password:
+        <input type="password" name="password_first" required>
+        Confirm password:
+        <input type="password" name="password_second" required>
+        First name:
+        <input type="text" name="first_name" required>
+        <input type="submit" value="Send">
+    </form>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+                <strong>{{message}}</strong>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+</div>
+{% endblock %}

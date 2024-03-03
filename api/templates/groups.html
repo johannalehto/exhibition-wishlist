@@ -7,13 +7,14 @@
         {% if all_groups_by_user %}
             {% for group in all_groups_by_user %}
                 <h3>{{ group.group_name }}</h3>
-                <p>{{ group.group_description }}</p>
+                <p><em>{{ group.group_description }}</em></p>
                     {% if group.members %}
-                    <h3>Members:
-                        {% for member in group.members %}
+                    <p>members:  <strong>
+                       {% for member in group.members %}
                             {{member['first_name']}}
                         {% endfor %}
-                    </h3>
+                        </strong>
+                    </p>
                     {% endif %}
                     <form action="{{ url_for('leave_group', group_id=group.id) }}" method="POST">
                         <button class="btn btn-dark">Leave</button>
@@ -33,12 +34,13 @@
         {% if all_groups %}
             {% for group in all_groups %}
                 <h3>{{ group.group_name }}</h3>
-                <p>{{ group.group_description }}</p>
+                <p><em>{{ group.group_description }}</em></p>
                     {% if group.members %}
-                    <p>members:
+                    <p>members:  <strong>
                         {% for member in group.members %}
                             {{member['first_name']}}
                         {% endfor %}
+                    </strong>
                     </p>
                     {% endif %}
                     <form action="{{ url_for('join_group', group_id=group.id) }}" method="POST">
