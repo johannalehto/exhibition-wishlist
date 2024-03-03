@@ -6,3 +6,4 @@ venv/
 .env
 .pre-commit-config.yaml
 .dockerignore
+.old_index.html
