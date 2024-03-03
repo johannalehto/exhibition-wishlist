@@ -195,22 +195,26 @@ def add_group():
 
 @app.route("/create_group", methods=["POST"])
 def create_group():
-    # TODO: create a separate method for csrf
     if session["csrf_token"] != request.form["csrf_token"]:
         flash("Something went wrong, please try again.")
         return redirect(url_for("display_exhibitions"))
 
     required_fields = ["group_name"]
     if check_missing_fields(required_fields):
-        return redirect("/create_group")
+        return redirect(url_for("add_group"))
+
     new_group = create_new_group(
         group_name=request.form["group_name"],
         group_description=request.form["group_description"],
     )
+
+    user_id = session.get("user_id")
+
     if new_group[0]:
-        flash(new_group[1])
+        add_user_to_group(user_id, new_group[1])
+        flash("Group created and you are the first member!")
         return redirect(url_for("display_exhibitions"))
-    flash(new_group[1])
+    flash("Failed to create the group. Please try again.")
     return redirect(url_for("add_group"))
 
 @app.route("/join_group/<int:group_id>", methods=["POST"])

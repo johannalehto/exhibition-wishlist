@@ -15,14 +15,14 @@ def create_new_group(
         """
         INSERT INTO groups (group_name, group_description)
         VALUES (:group_name, :group_description)
+        RETURNING id
         """
     )
 
-    db.session.execute(sql, new_group)
+    result = db.session.execute(sql, new_group)
+    group_id = result.fetchone()
     db.session.commit()
-
-    # TODO:
-    return True, "Added group succesfully"
+    return True, group_id[0]
 
 def add_user_to_group(user_id: int, group_id: int):
     new_join = {"user_id": user_id, "group_id": group_id}
