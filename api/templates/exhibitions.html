@@ -4,7 +4,6 @@
 <div>
     {% if groups|length > 0 %}
         <form action="/display_exhibitions" method="get">
-
             <select name="group_id" onchange="this.form.submit()">
                 <option>Group:</option>
                 {% for group in groups %}
@@ -17,13 +16,11 @@
                 {% endfor %}
             </select>
         </form>
-
-        <h2>Add an exhibition to the list:</h2>
         <form action="/add_exhibition" method="GET">
-            <button type="submit" class="btn btn-primary">Add exhibition</button>
+            <button type="submit" class="btn btn-primary">+ Add exhibition</button>
         </form>
 
-        <h2>Currently open Exhibitions:</h2>
+        <h2>Currently Open Exhibitions:</h2>
         <hr>
         {% if current_exhibitions %}
             {% for exhibition in current_exhibitions %}

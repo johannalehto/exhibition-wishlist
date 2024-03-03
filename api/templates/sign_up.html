@@ -13,12 +13,6 @@
         <input type="text" name="first_name" required>
         <input type="submit" value="Send">
     </form>
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-                <strong>{{message}}</strong>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
+
 </div>
 {% endblock %}

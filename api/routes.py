@@ -183,7 +183,7 @@ def groups():
     return render_template(
         "groups.html",
         all_groups_by_user=all_groups_by_user,
-        groups_without_user=groups_without_user,
+        all_groups=groups_without_user,
         username=username
     )
 

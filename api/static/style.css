@@ -102,3 +102,9 @@ label {
     align-self: flex-start;
     margin-left: 10%;
 }
+
+.header-button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
