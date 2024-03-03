@@ -57,10 +57,10 @@
             <p>No exhibitions added</p>
         {% endif %}
 
-
         <hr>
         <h2>Past exhibitions:</h2>
         <hr>
+        {% if past_exhibitions %}
             {% for exhibition in past_exhibitions %}
                 <p>{{ exhibition.start_date.strftime('%d.%m.%Y') }} - {{ exhibition.end_date.strftime('%d.%m.%Y') }}</p>
                 <h3>{{ exhibition.exhibition_name }}</h3>
@@ -74,6 +74,9 @@
                 {% endif %}
             <hr>
             {% endfor %}
+        {% else %}
+            <p>No past exhibitions</p>
+        {% endif %}
     {% else %}
         <p>You are not part of any groups. Join or create a group to start adding and viewing exhibitions.</p>
         <form action="{{ url_for('groups') }}" method="GET">

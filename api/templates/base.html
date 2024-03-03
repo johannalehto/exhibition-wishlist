@@ -7,7 +7,9 @@
 </head>
 <body>
     <div class="top-banner">
+        <a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">
         <h1>Exhibition Wishlist</h1>
+        </a>
         <div class="navi">
             {% if username %}
             <p>logged in: <strong>{{ username }}</strong></p>
