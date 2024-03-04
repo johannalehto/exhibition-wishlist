@@ -16,6 +16,26 @@ main {
     padding: 20px;
 }
 
+.headers-wrapper h1{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.headers-wrapper h2{
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.headers-wrapper h3{
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 0.5em;
+}
+
+
 input[type=text], input[type=password], input[type=date], select {
     padding: 10px;
     margin: 10px 0;
@@ -57,6 +77,11 @@ a {
 .top-banner h1 {
     margin: 0;
     font-weight: normal;
+}
+
+.top-banner .headers {
+    display: flex;
+    align-items: center;
 }
 
 .top-banner .navi {

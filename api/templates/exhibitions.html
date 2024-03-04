@@ -75,10 +75,14 @@
             <p>No past exhibitions</p>
         {% endif %}
     {% else %}
-        <p>You are not part of any groups. Join or create a group to start adding and viewing exhibitions.</p>
+    <div class="headers-wrapper">
+        <h1>Welcome to Exhibition Wish list!</h1>
+        <h2>To get started, you need to join a group or create one.</h2>
         <form action="{{ url_for('groups') }}" method="GET">
-            <button class="btn btn-dark">Manage groups</button>
+            <button class="btn btn-dark">Go see the Groups</button>
         </form>
+    </div>
+
     {% endif %}
 </div>
 {% endblock %}

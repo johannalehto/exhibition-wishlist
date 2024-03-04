@@ -7,9 +7,14 @@
 </head>
 <body>
     <div class="top-banner">
-        <a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">
-        <h1>Exhibition Wishlist</h1>
-        </a>
+        <div class="headers">
+            <a href="{{ url_for('index') }}" style="color: white; text-decoration: none;">
+                <h1>Exhibition Wishlist</h1>
+            </a>
+            <form action="/" method="GET">
+                <button type="submit" class="btn btn-primary">My lists</button>
+            </form>
+        </div>
         <div class="navi">
             {% if username %}
             <p>logged in: <strong>{{ username }}</strong></p>
