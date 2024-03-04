@@ -147,11 +147,8 @@ def add_exhibition_to_group(exhibition_id, group_id):
         db.session.execute(sql, {"group_id": group_id, "exhibition_id": exhibition_id})
         db.session.commit()
     except Exception:
-        print('error adding exhibition to group')
         return False
-    print('added exhibition to group')
     return True
-
 
 def create_new_exhibition(
     exhibition_name,
