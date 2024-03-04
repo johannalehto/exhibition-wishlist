@@ -1,39 +1,47 @@
 # Changelog
 
+## 🚀 3-3-2024
+
+✅ **Create a group of friends:** User can create new group which can start their own list
+
+✅ **Join existing group of friends:** User can view a list of existing groups and join those
+
+✅ **View exhibition lists per group:** User can see exhibitions that belong to each group, add exhibitions and mark if interested
+
+✅ some CSS styling added
+
+
 
 ## 🚀 18-2-2024
 
-✅ **Museum suggestions:** User can choose a museum from a list of existing museums when adding a new exhibition | 🔴 no tests
+✅ **Museum suggestions:** User can choose a museum from a list of existing museums when adding a new exhibition 
 
-✅ **Check required fields** Empty fields not allowed, responses with error messages | 🔴 no tests
+✅ **Check required fields** Empty fields not allowed, responses with error messages 
 
-✅ **Tracking Attendance:** Users can mark which exhibitions they plan to attend, see others attending, and leave if not interested | 🔴 no tests
+✅ **Tracking Attendance:** Users can mark which exhibitions they plan to attend, see others attending, and leave if not interested 
 
-✅ **Exhibition closing in N days:** Users can see in how many days exhibition is closing. | 🔴 no tests
+✅ **Exhibition closing in N days:** Users can see in how many days exhibition is closing. 
 
 ✅ Exception and error handling for existing features
 
 ✅ **Exhibitions sorted:** Exhibitions listed according to ones ending soonest
 
-✅ **Past exhibitions:** User can see exhibitions that already ended | 🔴 no tests
+✅ **Past exhibitions:** User can see exhibitions that already ended 
 
 
 ## 🚀 4-2-2024
 
-✅ **User registration:** Users can create an account | 🔴 no tests
+✅ **User registration:** Users can create an account 
 
-✅ **User login:** Users can log in, validation for existing account and matching password | 🔴 no tests
+✅ **User login:** Users can log in, validation for existing account and matching password 
 
-✅ **Adding exhibitions:** Users can add new exhibitions to the database | 🔴 no tests
+✅ **Adding exhibitions:** Users can add new exhibitions to the database
 
-✅ **Viewing exhibition information:** Users can view a list of added exhibitions, with the exhibition name, in which venue it is held at, start and end dates | 🔴 no tests
+✅ **Viewing exhibition information:** Users can view a list of added exhibitions, with the exhibition name, in which venue it is held at, start and end dates
 
 
 ## 🚧 TODO
 
-🔲 ❌ Frontend not done at all: CSS styling coming up. ❌
-
-🔲 ❌ All database tables are not used: group feature coming up  ❌
 
 🔲 Tests for existing features
 
@@ -41,19 +49,14 @@
 
 
 
+### Upcoming Features
 
-### Features
-
-🔲 **Create a group of friends:** User can create new group which can start their own list
-
-🔲 **Join existing group of friends:** User can create new group which can start their own list
 
 🔲 **Sorting Exhibitions:** Exhibitions can be organized chronologically to see which ones are ending soon
 
 🔲 **Delete exhibitions:** User can delete exhibition should they have admin rights
 
 🔲 **Ending soon -tag:** The application reminds about upcoming exhibitions that are about to end soon (eg within two weeks)
-
 
 🔲 **Mark visited:** User can mark if they have already visited the exhibition
 
@@ -81,4 +84,3 @@
 
 ✅ **Exhibitions per group:** which exhibitions belongs to a group
 
-🔲 **Events:** a separate table for openings and other events
